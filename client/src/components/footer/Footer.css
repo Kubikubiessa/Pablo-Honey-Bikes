@@ -1,0 +1,86 @@
+html {
+    background-color: #050607;
+  }
+  
+  footer {
+    box-shadow: 0 5px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: auto;
+  
+    position: relative;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%);
+    font-family: "Roboto", sans-serif;
+    z-index: 3;
+  }
+  
+  .footer {
+    padding: 20px 0;
+    background-color: #245264;
+    
+  }
+  
+  .footer .social {
+    text-align: center;
+    padding-bottom: 25px;
+    color: #fff;
+  }
+  
+  .footer .social a {
+    font-size: 24px;
+    color: inherit;
+    /* border: 1px solid #fff; */
+    width: 40px;
+    height: 40px;
+    line-height: 38px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 8px;
+    opacity: 0.75;
+  }
+  
+  .footer .social a:hover {
+    opacity: 0.9;
+    transform: translateY(-10px);
+    color: black;
+  }
+  
+  .footer ul {
+    margin-top: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    text-align: center;
+  }
+  
+  .footer ul a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.8;
+  }
+  
+  .footer ul li {
+    display: inline-block;
+    padding: 0 15px;
+  }
+  
+  .footer ul li a:hover {
+    opacity: 1;
+    color: #fff;
+  }
+  .footer .copyright {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 15px;
+    color: #fff;
+  }
+  .instagram {
+    height: 30px;
+    width: 30px;
+
+  }
+  
