@@ -5,12 +5,12 @@
 
   align-items: center;
 
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   padding: 0 20px;
   background: black;
   box-shadow: 0 5px rgba(0, 0, 0, 0.25);
   width: 95%;
-  height: 150px;
+  height: 190px;
   top: 20px;
   /* transform: translate(-50%); */
   left: 50%;
@@ -61,8 +61,8 @@
 
 img.logo {
   padding: 2rem;
-  width: 150px; /* or any desired width */
-  height: auto; /* to maintain aspect ratio */
+  width: 250px; /* or any desired width */
+  height: 250px; /* to maintain aspect ratio */
   display: block; /* to remove any default inline alignment */
    
    
@@ -76,7 +76,7 @@ img.logo {
 .brand-heading {
   font-family: 'Indie Flower';
   /* font-family: 'Quicksand', sans-serif; */
-  font-size: 3.5rem;
+  font-size: 3rem;
 }
 
 .iLogo {
