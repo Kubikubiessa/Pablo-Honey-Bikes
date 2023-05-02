@@ -1,12 +1,11 @@
-//import logo from './assets/1.png';
-// import "./App.css";
 import { BrowserRouter as Router } from "react-router-dom";
+import { useState } from "react";
+import { changeClassName } from "./helper/changeClassName";
 import AnimatedRoutes from "./components/AnimatedRoutes";
 import Navbar from "./components/navbar/Navbar";
-import Hero from "./components/hero/Hero";
+// import Hero from "./components/hero/Hero";
+import Content from "./components/content/Content";
 import Footer from "./components/footer/Footer";
-import { changeClassName } from "./helper/changeClassName";
-import { useState } from "react";
 
 function App() {
   const [popUp, setPopUp] = useState(false);
@@ -15,7 +14,10 @@ function App() {
       <div className="App">
         <Router>
           <Navbar />
-          <Hero />
+          {/* <Hero /> */}
+
+          <Content />
+
           <AnimatedRoutes />
           <Footer />
         </Router>

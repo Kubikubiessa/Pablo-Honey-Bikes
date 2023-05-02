@@ -71,12 +71,13 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/Content" className="nav-links">
+                  <a href="/Shop" className="nav-links">
                     {/* <i className="fa-solid fa-address-book"></i> */}
-                    CONTENT
+                    SHOP
                   </a>
                 </li>
                 <li>
+                  
                 <span
                   className="nav-links btnLogin "
                   onClickCapture={popUpButton}
