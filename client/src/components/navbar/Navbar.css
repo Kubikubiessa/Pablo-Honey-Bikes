@@ -183,8 +183,9 @@ img.logo {
   justify-content: center;
 } */
 
-*/ @media screen and (max-width: 1030px) {
+@media screen and (max-width: 1030px) {
   .navbar {
     font-size: 15px;
   }
+  
 }
