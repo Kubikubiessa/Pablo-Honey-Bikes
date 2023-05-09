@@ -1,6 +1,9 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { User } = require("../models/User");
 const { Admin } = require("../models/Admin");
+const { Product } = require("../models/Product");
+const { Category } = require("../models/Category");
+const { Order } = require("../models/Order");
 const { signToken } = require("../utils/auth");
 const fetch = require("node-fetch");
 
@@ -109,15 +112,10 @@ const resolvers = {
         throw e;
       }
     },
-    addCategory: async (
-      parent,
-      { name },
-      context,
-      info
-    ) => {
+    addCategory: async (parent, { name }, context, info) => {
       try {
         const category = await Category.create({
-          name
+          name,
         });
         return { Category };
       } catch (e) {
@@ -125,15 +123,10 @@ const resolvers = {
         throw e;
       }
     },
-    addOrder: async (
-      parent,
-      { items },
-      context,
-      info
-    ) => {
+    addOrder: async (parent, { items }, context, info) => {
       try {
         const category = await Order.create({
-          items
+          items,
         });
         return { Order };
       } catch (e) {
@@ -141,6 +134,58 @@ const resolvers = {
         throw e;
       }
     },
+
+    //all Update processes of the database
+    updateProduct: (
+      parent,
+      { id, name, description, price, categoryId },
+      context,
+      info
+    ) => {
+      const updatedProduct = Product.findByIdAndUpdate(
+        id,
+        { name, description, price, category: categoryId },
+        { new: true }
+      );
+      return updatedProduct;
+    },
+    updateCategory: (parent, { id, name }, context, info) => {
+      const updatedCategory = Category.findByIdAndUpdate(
+        id,
+        { name },
+        { new: true }
+      );
+      return updatedCategory;
+    },
+    updateOrder: (parent, { id, status }, context, info) => {
+      const updatedOrder = Order.findByIdAndUpdate(
+        id,
+        { status },
+        { new: true }
+      );
+      return updatedOrder;
+    },
+    // All delete processes of the database
+
+    removeUser: async (parent, { _id }) => {
+      return User.findOneAndDelete({ _id: _id });
+    },
+    removeAdmin: async (parent, { _id }) => {
+      return Admin.findOneAndDelete({ _id: _id });
+    },
+    deleteProduct: (parent, { id }, context, info) => {
+      const deletedProduct = Product.findByIdAndDelete(id);
+      return deletedProduct;
+    },
+    deleteCategory: (parent, { id }, context, info) => {
+      const deletedCategory = Category.findByIdAndDelete(id);
+      return deletedCategory;
+    },
+    deleteOrder: (parent, { id }, context, info) => {
+      const deletedOrder = Order.findByIdAndDelete(id);
+      return deletedOrder;
+      },
+
     //all login processes
     login: async (parent, { email, password }) => {
       try {
@@ -185,13 +230,6 @@ const resolvers = {
         console.error("login :", e);
         throw e;
       }
-    },
-
-    removeUser: async (parent, { _id }) => {
-      return User.findOneAndDelete({ _id: _id });
-    },
-    removeAdmin: async (parent, { _id }) => {
-      return Admin.findOneAndDelete({ _id: _id });
     },
   },
 };
