@@ -1,0 +1,106 @@
+.home-categories {
+    width: 100%;
+    position: relative;
+    background-color: rgb(9, 9, 9);
+    color: #fff;
+    padding: 80px 0;
+    padding-top: 40px;
+  }
+  
+  .home-categories-title {
+    padding-left: calc(5% + 15px);
+    font-size: 25px;
+    font-weight: 600;
+    padding-top: 80px;
+    padding-bottom: 10px;
+  }
+  
+  .home-categories-windowWrap {
+    width: 100%;
+    height: 60vw;
+    max-height: 700px;
+    display: flex;
+    /* padding: 0 5%; */
+  }
+  
+  .home-categories-window {
+    width: 33.33%;
+    height: 90%;
+    position: relative;
+  }
+  .home-categories-window1 {
+    background: url("../../assets/niner-bikes-niner-air-9.jpeg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .home-categories-window2 {
+    background: url("../../assets/nox teocalli rim bead_0.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .home-categories-window3 {
+    background: url("../../assets/BikingChecklist.jpeg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  
+  .home-categories-innerWindow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #000;
+    opacity: 0.6;
+    transition: opacity 0.3s ease-in;
+    cursor: pointer;
+  }
+  .home-categories-innerWindow:hover {
+    opacity: 0;
+  }
+  
+  .home-categories-windowText {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5vw;
+    white-space: nowrap;
+    font-weight: 900;
+    color: #fff;
+  }
+  
+  @media screen and (max-width: 1000px) {
+    .home-categories-title {
+      padding-top: 40px;
+      padding-left: 20px;
+    }
+    .home-categories-windowWrap {
+      height: 40vw;
+    }
+  }
+  
+  @media screen and (max-width: 800px) {
+    .home-categories-title {
+      font-size: 20px;
+    }
+  }
+  
+  @media screen and (max-height: 600px) {
+    .home-categories-windowWrap {
+      height: 40vw;
+    }
+    .home-categories-title {
+      font-size: 14px;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .home-categories-windowWrap {
+      height: 80vw;
+    }
+    .home-categories-windowText {
+      font-size: 3vw;
+    }
+  }

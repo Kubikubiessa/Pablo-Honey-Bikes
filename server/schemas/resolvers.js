@@ -1,29 +1,74 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { User } = require("../models/User");
+const { Admin } = require("../models/Admin");
 const { signToken } = require("../utils/auth");
 const fetch = require("node-fetch");
 
 const resolvers = {
   Query: {
     // By adding context to our query, we can retrieve the logged in user without specifically searching for them
-    
-  me: async (parent, args, context) => {
-    if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id })
+
+    me: async (parent, args, context) => {
+      if (context.user) {
+        const userData = await User.findOne({ _id: context.user._id });
         // .select('-__v -password')
         return userData;
-    }
-    throw new AuthenticationError('Not logged in');
-}
+      }
+      throw new AuthenticationError("Not logged in");
+    },
+    Users: (parent, args, context, info) => {
+      const users = User.find();
+      return users;
+    },
+    Admin: async (parent, args, context) => {
+      if (context.admin) {
+        const adminData = await Admin.findOne({ _id: context.admin._id });
+        // .select('-__v -password')
+        return adminData;
+      }
+      throw new AuthenticationError("Not logged in");
+    },
+    Admins: (parent, args, context, info) => {
+      const admins = Admin.find();
+      return admins;
+    },
 
-
-}, 
-
+    Product: (parent, { id }, context, info) => {
+      const product = Product.findById(id);
+      return product;
+    },
+    Products: (parent, { category }, context, info) => {
+      if (category) {
+        const products = Product.find({ category: category });
+        return products;
+      } else {
+        const products = Product.find();
+        return products;
+      }
+    },
+    Category: (parent, { id }, context, info) => {
+      const category = Category.findById(id);
+      return category;
+    },
+    Categories: (parent, args, context, info) => {
+      const categories = Category.find();
+      return categories;
+    },
+    Order: (parent, { id }, context, info) => {
+      const order = Order.findById(id);
+      return order;
+    },
+    Orders: (parent, args, context, info) => {
+      const orders = Order.find();
+      return orders;
+    },
+  },
 
   Mutation: {
+    //All additions to the database
     addUser: async (parent, { username, email, password }) => {
       try {
-        console.log(username, email, password)
+        console.log(username, email, password);
         const user = await User.create({ username, email, password });
         const token = signToken(user);
 
@@ -33,35 +78,121 @@ const resolvers = {
         throw e;
       }
     },
+    addAdmin: async (parent, { adminname, email, password }) => {
+      try {
+        console.log(adminname, email, password);
+        const admin = await Admin.create({ adminname, email, password });
+        const token = signToken(admin);
+
+        return { token, Admin };
+      } catch (e) {
+        console.error("addAdmin :", e); //defensive programming
+        throw e;
+      }
+    },
+    addProduct: async (
+      parent,
+      { name, description, price, categoryId },
+      context,
+      info
+    ) => {
+      try {
+        const product = await Product.create({
+          name,
+          description,
+          price,
+          category: categoryId,
+        });
+        return { Product };
+      } catch (e) {
+        console.error("addProduct :", e); //defensive programming
+        throw e;
+      }
+    },
+    addCategory: async (
+      parent,
+      { name },
+      context,
+      info
+    ) => {
+      try {
+        const category = await Category.create({
+          name
+        });
+        return { Category };
+      } catch (e) {
+        console.error("addCategory :", e); //defensive programming
+        throw e;
+      }
+    },
+    addOrder: async (
+      parent,
+      { items },
+      context,
+      info
+    ) => {
+      try {
+        const category = await Order.create({
+          items
+        });
+        return { Order };
+      } catch (e) {
+        console.error("addOrder :", e); //defensive programming
+        throw e;
+      }
+    },
+    //all login processes
     login: async (parent, { email, password }) => {
       try {
-      console.log("login: ", email, password);
-      const user = await User.findOne({ email });
+        console.log("login: ", email, password);
+        const user = await User.findOne({ email });
 
-      if (!user) {
-        throw new AuthenticationError("No profile with this email found!");
+        if (!user) {
+          throw new AuthenticationError("No profile with this email found!");
+        }
+
+        const correctPw = await user.isCorrectPassword(password);
+
+        if (!correctPw) {
+          throw new AuthenticationError("Incorrect password!");
+        }
+
+        const token = signToken(user);
+        return { token, user };
+      } catch (e) {
+        console.error("login :", e);
+        throw e;
       }
+    },
+    loginAdmin: async (parent, { email, password }) => {
+      try {
+        console.log("login: ", email, password);
+        const admin = await Admin.findOne({ email });
 
-      const correctPw = await user.isCorrectPassword(password);
+        if (!admin) {
+          throw new AuthenticationError("No profile with this email found!");
+        }
 
-      if (!correctPw) {
-        throw new AuthenticationError("Incorrect password!");
+        const correctPw = await admin.isCorrectPassword(password);
+
+        if (!correctPw) {
+          throw new AuthenticationError("Incorrect password!");
+        }
+
+        const token = signToken(admin);
+        return { token, admin };
+      } catch (e) {
+        console.error("login :", e);
+        throw e;
       }
+    },
 
-      const token = signToken(user);
-      return { token, user }
-    }catch (e){
-      console.error("login :", e); 
-      throw e;
-    }
-    
-  },
- 
     removeUser: async (parent, { _id }) => {
       return User.findOneAndDelete({ _id: _id });
     },
-     
-     
+    removeAdmin: async (parent, { _id }) => {
+      return Admin.findOneAndDelete({ _id: _id });
+    },
   },
 };
 

@@ -4,7 +4,7 @@ import { changeClassName } from "./helper/changeClassName";
 import AnimatedRoutes from "./components/AnimatedRoutes";
 import Navbar from "./components/navbar/Navbar";
 // import Hero from "./components/hero/Hero";
-import Content from "./components/content/Content";
+// import Content from "./components/content/Content";
 import Footer from "./components/footer/Footer";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
           <Navbar />
           {/* <Hero /> */}
 
-          <Content />
+          {/* <Content /> */}
 
           <AnimatedRoutes />
           <Footer />

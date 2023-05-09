@@ -12,11 +12,14 @@ const Images = [
    
    { image:  "images/DSC_0019.jpg", className: "fade" },
    { image:  "images/DSC_0073.jpg",className: "" },
-  { image:  "images/DSC_0009.jpg" },
-  { image:  "images/DSC_0008.jpg" },
+  { image:  "images/DSC_0009.jpg", },
+  { image:  "images/DSC_0008.jpg", },
   { image:  "images/DSC_0074.jpg" },
   { image:  "images/DSC_0088.jpg" },
   { image:  "images/DSC_0144.jpg" },
+  { image:  "images/IMG_5659.JPG" },
+  { image:  "images/MG_6443.jpeg" },
+   
   // { image:  "../../../public/images/DSC_0019.jpg"},
   { image: image1},
   { image: image2 },
@@ -49,7 +52,7 @@ const Hero = () => {
         delay: 0.4,
         // ease: [0.42, 0, 0.58, 1]
         animation: "fade-in",
-        ease: [0.5, 1.3, 1, 1.2]
+        ease: [0.5, 1.3, 1, 1.0]
       }}
         // animate={{ opacity: 1 }}
         // //  animate={{ y: ["-5px", "5px", "-5px"] }}
