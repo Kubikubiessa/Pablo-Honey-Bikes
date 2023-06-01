@@ -1,4 +1,6 @@
 import React from "react";
+import Content from "../../components/content/Content";
+
 
 //import "./About.css";
 //import About from "../about/About";
@@ -6,7 +8,7 @@ import React from "react";
 const Shop = () => {
   return (
     <>
-      
+         <Content />
     </>
   );
 };
