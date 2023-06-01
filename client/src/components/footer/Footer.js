@@ -35,6 +35,9 @@ const Footer = () => {
           <li>
             <a href="/Contact">Terms</a>
           </li>
+          <li>
+            <a href="/Adminstration">Administration</a>
+          </li>
         </ul>
         <p className="copyright">Pablo Honey Bikes @ 2023</p>
       </footer>

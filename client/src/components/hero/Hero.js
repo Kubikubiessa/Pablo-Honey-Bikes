@@ -18,7 +18,7 @@ const Images = [
   { image:  "images/DSC_0088.jpg" },
   { image:  "images/DSC_0144.jpg" },
   { image:  "images/IMG_5659.JPG" },
-  { image:  "images/MG_6443.jpeg" },
+  // { image:  "images/MG_6443.jpeg" },
    
   // { image:  "../../../public/images/DSC_0019.jpg"},
   { image: image1},

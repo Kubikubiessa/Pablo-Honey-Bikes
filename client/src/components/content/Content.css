@@ -9,7 +9,7 @@
   
   .home-categories-title {
     padding-left: calc(5% + 15px);
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 600;
     padding-top: 80px;
     padding-bottom: 10px;
@@ -65,7 +65,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2.5vw;
+    font-size: 1.5vw;
     white-space: nowrap;
     font-weight: 900;
     color: #fff;

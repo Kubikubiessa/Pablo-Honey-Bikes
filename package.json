@@ -27,6 +27,7 @@
     "jwt-decode": "^3.1.2",
     "mongoose": "^7.0.3",
     "morgan": "^1.10.0",
-    "react-bootstrap": "^2.7.3"
+    "react-bootstrap": "^2.7.3",
+    "react-navbar-dropdown": "^1.4.3"
   }
 }

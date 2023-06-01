@@ -5,29 +5,29 @@ import { Link } from "react-router-dom";
 export default function Content() {
   return (
     <div className="home-categories">
-      <p className="home-categories-title">EXPLORE OUR SERVICES</p>
+      <p className="home-categories-title">EXPLORE OUR CUSTOM WHEEL OPTIONS:</p>
 
       <div className="home-categories-windowWrap">
         <Link
-          to="/shop/bikes"
+          to="/mtbwheels"
           className="home-categories-window home-categories-window1"
         >
           <div className="home-categories-innerWindow"></div>
-          <p className="home-categories-windowText">BIKES</p>
+          <p className="home-categories-windowText">Mountain Bike Wheels</p>
         </Link>
         <Link
-          to="/shop/wheel"
+          to="/roadwheels"
           className="home-categories-window home-categories-window2"
         >
           <div className="home-categories-innerWindow"></div>
-          <p className="home-categories-windowText">WHEELS</p>
+          <p className="home-categories-windowText">Road Bike Wheels</p>
         </Link>
         <Link
-          to="shop/accessories"
+          to="/gravelwheels"
           className="home-categories-window home-categories-window3"
         >
           <div className="home-categories-innerWindow"></div>
-          <p className="home-categories-windowText">ACCESSORIES</p>
+          <p className="home-categories-windowText">Gravel Bike Wheels</p>
         </Link>
       </div>
     </div>
