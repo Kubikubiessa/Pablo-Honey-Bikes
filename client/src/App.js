@@ -14,10 +14,6 @@ function App() {
       <div className="App">
         <Router>
           <Navbar />
-          {/* <Hero /> */}
-
-          {/* <Content /> */}
-
           <AnimatedRoutes />
           <Footer />
         </Router>

@@ -9,8 +9,8 @@ import Auth from "../../utils/auth";
 const Navbar = () => {
   const [classIcon, setIcon] = useState(false);
   const [closeNav, setCloseNav] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const { setPopUp } = useContext(changeClassName);
-  const [showDropdown, setShowDropdown] = useState(true);
 
   function popUpButton() {
     setPopUp((popUp) => !popUp);
