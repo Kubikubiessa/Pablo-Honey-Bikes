@@ -5,7 +5,7 @@ import App from './App';
 //import reportWebVitals from './reportWebVitals';
 import {
   ApolloClient,
-  InMemoryCache,
+  // InMemoryCache,
   ApolloProvider,
   createHttpLink,
 } from "@apollo/client";
@@ -29,7 +29,7 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
   // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
   link: authLink.concat(httpLink),
-  cache: CustomInMemoryCache(),
+  cache: CustomInMemoryCache,
 });
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

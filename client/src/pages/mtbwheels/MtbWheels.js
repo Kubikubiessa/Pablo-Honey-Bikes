@@ -1,4 +1,5 @@
 import{ React, useState } from "react";
+import Cart from "../../components/cart/Cart";
 // import ".MtbWheels.css";
 
 
@@ -13,7 +14,7 @@ const MtbWheels = () => {
 
   return (
     <>
-      
+      <Cart/>
     </>
   );
 };
