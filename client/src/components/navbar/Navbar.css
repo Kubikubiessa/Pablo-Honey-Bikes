@@ -1,10 +1,7 @@
 .navbar {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   font-size: 1.5rem;
   padding: 0 20px;
   background: black;
@@ -34,7 +31,7 @@
 
 .btnLogin {
   width: 130px;
-  height: 40px;
+  height: 35px;
   vertical-align: middle;
   background: transparent;
   border: solid 1px #fff;
@@ -64,10 +61,6 @@ img.logo {
   width: 250px; /* or any desired width */
   height: 250px; /* to maintain aspect ratio */
   display: block; /* to remove any default inline alignment */
-   
-   
-  
-   
   }
 
   
@@ -100,7 +93,6 @@ img.logo {
   justify-content: end;
 }
 .nav-links {
- 
   text-decoration: none;
   color: #fff;
   padding: 0.7rem 1rem;
@@ -127,6 +119,7 @@ img.logo {
   white-space: nowrap;
   list-style: none;
   padding-right: 200px;
+  margin-top: 13.5px;
   background-color: #000;
   opacity: 0.7;
   
@@ -145,7 +138,7 @@ img.logo {
 width: 100%;
 }
 .dropdown-menu a:hover {
-  background-color: #192e3e;
+  background-color: #536c7f;
   border-radius: 0px;
   transition: all 0.2s ease-in-out;
   /* border: solid 0.5px #fff; */
