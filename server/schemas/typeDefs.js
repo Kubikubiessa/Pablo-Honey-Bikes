@@ -13,9 +13,9 @@ const typeDefs = gql`
     adminname: String!
     email: String!
     password: String!
-    // createdAt: String!
-    // updatedAt: String!
+
   }
+  
   type Product {
     id: ID!
     productname: String!
@@ -34,6 +34,13 @@ const typeDefs = gql`
     total: Float!
     status: OrderStatus!
   }
+  type OrderItem {
+    id: ID!
+    product: Product!
+    quantity: Int!
+  }
+
+
   enum OrderStatus {
     CREATED
     PROCESSING
@@ -60,26 +67,49 @@ const typeDefs = gql`
     admins: [Admin]!
     
   }
+
+
   type Mutation {
-    addUser(username: String!, email: String!, password: String!): Auth
-    login(email: String!, password: String!): Auth
-    addAdmin(adminname: String!, email: String!, password: String!): Auth
-    loginAdmin(email: String!, password: String!): Auth
-    removeUser(_id: ID!): User
-    removeAdmin(_id: ID!): Admin
-    createProduct(name: String!, description: String!, price: Float!, categoryId: ID!): Product!
-    updateProduct(id: ID!, name: String, description: String, price: Float, categoryId: ID): Product!
-    deleteProduct(id: ID!): ID!
-    createCategory(name: String!): Category!
-    updateCategory(id: ID!, name: String): Category!
-    deleteCategory(id: ID!): ID!
-    createOrder(items: [OrderItemInput!]!): Order!
-    updateOrder(id: ID!, status: OrderStatus): Order!
-    deleteOrder(id: ID!): ID!
-  }
+      addUser(username: String!, email: String!, password: String!): Auth
+      login(email: String!, password: String!): Auth
+      addAdmin(adminname: String!, email: String!, password: String!): Auth
+      loginAdmin(email: String!, password: String!): Auth
+      removeUser(_id: ID!): User
+      removeAdmin(_id: ID!): Admin
+      addProduct(name: String!, description: String!, price: Float!, categoryId: ID!): Product!
+      updateProduct(id: ID!, name: String, description: String, price: Float, categoryId: ID): Product!
+      deleteProduct(id: ID!): ID!
+      addCategory(name: String!): Category!
+      updateCategory(id: ID!, name: String): Category!
+      deleteCategory(id: ID!): ID!
+      addOrder(items: [OrderItemInput!]!): Order!
+      updateOrder(id: ID!, status: OrderStatus): Order!
+      deleteOrder(id: ID!): ID!
+    }
+
   input OrderItemInput {
     productId: ID!
     quantity: Int!
   }
 `;
 module.exports = typeDefs;
+// createdAt: String!
+  // updatedAt: String!
+  // type Mutation {
+  //   addUser(username: String!, email: String!, password: String!): UserPayload!
+  //   addAdmin(adminname: String!, email: String!, password: String!): AdminPayload!
+  //   addProduct(name: String!, description: String!, price: Float!, categoryId: ID!): ProductPayload!
+  //   addCategory(name: String!): CategoryPayload!
+  //   addOrder(items: [ID!]!): OrderPayload!
+  //   updateProduct(id: ID!, name: String, description: String, price: Float, categoryId: ID): Product
+  //   updateCategory(id: ID!, name: String): Category
+  //   updateOrder(id: ID!, status: String): Order
+  //   removeUser(_id: ID!): User
+  //   removeAdmin(_id: ID!): Admin
+  //   deleteProduct(id: ID!): Product
+  //   deleteCategory(id: ID!): Category
+  //   deleteOrder(id: ID!): Order
+  //   login(email: String!, password: String!): AuthPayload!
+  //   loginAdmin(email: String!, password: String!): AuthPayload!
+  // }
+  
