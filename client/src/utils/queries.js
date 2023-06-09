@@ -83,19 +83,23 @@ export const GET_CATEGORIES = gql`
 `;
 
 export const GET_ORDER = gql`
-  query getOrder($id: ID!) {
-    order(id: $id) {
-      id
-      items {
-        productId
-        quantity
-      }
-      total
-      status
-    }
-  }
-`;
+query GetOrderItems {
+  orderItems @client 
+}
 
+ 
+`;
+ // query getOrder($id: ID!) {
+  //   order(id: $id) {
+  //     id
+  //     items {
+  //       productId
+  //       quantity
+  //     }
+  //     total
+  //     status
+  //   }
+  // }
 export const GET_ORDERS = gql`
   query {
     orders {

@@ -1,12 +1,11 @@
 import React from "react";
 import { gql, useQuery } from '@apollo/client';
+
 import "./Cart.css";
-const GET_ORDER_ITEMS = gql`
-query GetOrderItems {
-    orderItems @client
-}` 
+import { GET_ORDER } from "../../utils/queries.js";
+ 
 const Cart = () => {
-    const { loading, error, data } = useQuery(GET_ORDER_ITEMS);
+    const { loading, error, data } = useQuery(GET_ORDER);
     if (loading) return 'loading cart';
     if (error) return <p>ERROR: {error.message}</p>
     console.log(data);
