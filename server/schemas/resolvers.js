@@ -19,11 +19,11 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in");
     },
-    Users: (parent, args, context, info) => {
+    users: (parent, args, context, info) => {
       const users = User.find();
       return users;
     },
-    Admin: async (parent, args, context) => {
+    admin: async (parent, args, context) => {
       if (context.admin) {
         const adminData = await Admin.findOne({ _id: context.admin._id });
         // .select('-__v -password')
@@ -31,16 +31,16 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in");
     },
-    Admins: (parent, args, context, info) => {
+    admins: (parent, args, context, info) => {
       const admins = Admin.find();
       return admins;
     },
 
-    Product: (parent, { id }, context, info) => {
+    product: (parent, { id }, context, info) => {
       const product = Product.findById(id);
       return product;
     },
-    Products: (parent, { category }, context, info) => {
+    products: (parent, { category }, context, info) => {
       if (category) {
         const products = Product.find({ category: category });
         return products;
@@ -49,19 +49,19 @@ const resolvers = {
         return products;
       }
     },
-    Category: (parent, { id }, context, info) => {
+    category: (parent, { id }, context, info) => {
       const category = Category.findById(id);
       return category;
     },
-    Categories: (parent, args, context, info) => {
+    categories: (parent, args, context, info) => {
       const categories = Category.find();
       return categories;
     },
-    Order: (parent, { id }, context, info) => {
+    order: (parent, { id }, context, info) => {
       const order = Order.findById(id);
       return order;
     },
-    Orders: (parent, args, context, info) => {
+    orders: (parent, args, context, info) => {
       const orders = Order.find();
       return orders;
     },
