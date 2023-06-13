@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const roleSchema = require("./Role").schema;
  
 const bcrypt = require("bcrypt");
 
@@ -10,6 +11,10 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
     },
+    role: {
+      roleSchema,
+    },
+   
     email: {
       type: String,
       required: true,

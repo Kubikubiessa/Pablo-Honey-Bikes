@@ -1,0 +1,24 @@
+[
+  {
+    "productname": "Skyline",
+    "description": "Product 1 description",
+    "price": 9.99,
+    "size": null,
+    "width": null,
+    "weight": null,
+    "drill": null,
+    "category": "6488d5fdd26b3127c65375bb"
+  },
+  {
+    "productname": "Teocalli",
+    "description": "Product 2 description",
+    "price": 19.99,
+    "size": null,
+    "width": null,
+    "weight": null,
+    "drill": null,
+    "category": "6488d5fdd26b3127c65375bb"
+  }
+]
+
+  
