@@ -1,21 +1,18 @@
 const { Schema, model } = require("mongoose");
- 
 
 const roleSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
-    scope: [{
-        title: String
-    }],
-    
-    
-     
-   
+    scope: [
+      {
+        title: String,
+      },
+    ],
+
     // // set this to use virtual below
   },
   {
@@ -27,7 +24,5 @@ const roleSchema = new Schema(
 
 // set up pre-save middleware to create password
 const Role = model("Role", roleSchema);
-
- 
 
 module.exports = Role;

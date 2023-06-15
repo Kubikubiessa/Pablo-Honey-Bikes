@@ -27,6 +27,18 @@ db.once('open', async () => {
     //   return { ...productData, category: category._id };
     // });
 
+    // for (let i = 0; i < thoughtSeeds.length; i++) {
+    //   const { _id, thoughtAuthor } = await Thought.create(thoughtSeeds[i]);
+    //   const user = await User.findOneAndUpdate(
+    //     { username: thoughtAuthor },
+    //     {
+    //       $addToSet: {
+    //         thoughts: _id,
+    //       },
+    //     }
+    //   );
+    // }
+
     const roles = await Role.insertMany(roleData);
     console.log('Roles seeded!');
 
