@@ -21,7 +21,7 @@ const typeDefs = gql`
   }
 
   type Product {
-    id: ID!
+    _id: ID!
     productname: String!
     description: String!
     price: Float!
@@ -33,20 +33,21 @@ const typeDefs = gql`
   }
 
   type Category {
-    id: ID!
+    _id: ID!
     categoryname: String!
     products: [Product!]!
   }
 
   type Order {
-    id: ID!
+    _id: ID!
     items: [OrderItem!]!
     total: Float!
     status: OrderStatus!
+    user: [User!]!
   }
 
   type OrderItem {
-    id: ID!
+    _id: ID!
     product: Product!
     quantity: Int!
   }
@@ -65,13 +66,13 @@ const typeDefs = gql`
 
   type Query {
     me: User
-    product(id: ID!): Product
+    product(_id: ID!): Product
     products(category: ID): [Product!]!
-    category(id: ID!): Category
+    category(_id: ID!): Category
     categories: [Category!]!
-    order(id: ID!): Order
+    order(_id: ID!): Order
     orders: [Order!]!
-    user(id: ID!): User
+    user(_id: ID!): User
     users: [User]!
   }
 
@@ -90,24 +91,34 @@ const typeDefs = gql`
       categoryId: ID!
     ): Product!
     updateProduct(
-      id: ID!
+      _id: ID!
       productname: String
       description: String
       price: Float
-      size: Int
       width: Float
       weight: Float
       drill: Int
       categoryId: ID
     ): Product!
-    deleteProduct(id: ID!): ID!
+    
+    deleteProduct(_id: ID!): ID!
     addCategory(categoryname: String!): Category!
-    updateCategory(id: ID!, categoryname: String): Category!
-    deleteCategory(id: ID!): ID!
-    addOrder(items: [OrderItemInput!]!): Order!
-    updateOrder(id: ID!, status: OrderStatus): Order!
-    deleteOrder(id: ID!): ID!
+    updateCategory(_id: ID!, categoryname: String, products: [ID!]): Category!
+
+
+    deleteCategory(_id: ID!): ID!
+    addOrder(items: [OrderItemInput!]!, total: Float!, status: String!, user: [UserInput!]!): Order!
+    updateOrder(_id: ID!, status: OrderStatus): Order!
+    deleteOrder(_id: ID!): ID!
   }
+
+  input UserInput {
+    userId: ID!
+    username: String!
+    
+    
+  }
+  
 
   input OrderItemInput {
     productId: ID!
