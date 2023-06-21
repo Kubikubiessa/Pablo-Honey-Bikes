@@ -17,15 +17,15 @@ db.once('open', async () => {
     await Role.deleteMany({});
 
     const categories = await Category.insertMany(categoryData);
-    console.log('Categories seeded!');
+    console.log('Categories seeded!', categories);
 
-    const products = await Product.insertMany(productData);
-    console.log('Products seeded!')
-    // productData.map((product) => {
-    //   const { category: categoryId, ...productData } = product;
-    //   const category = categories.find((cat) => cat._id === categoryId);
-    //   return { ...productData, category: category._id };
-    // });
+    const productwithCategories = productData.map((product) => {
+      
+      return { ...product, category: categories[0] };
+    });
+    const products = await Product.insertMany(productwithCategories);
+    console.log('Products seeded!', products)
+    
 
     // for (let i = 0; i < thoughtSeeds.length; i++) {
     //   const { _id, thoughtAuthor } = await Thought.create(thoughtSeeds[i]);
@@ -39,13 +39,20 @@ db.once('open', async () => {
     //   );
     // }
 
+    // const roles = await Role.insertMany(roleData);
+    // console.log('Roles seeded!');
+
     const roles = await Role.insertMany(roleData);
     console.log('Roles seeded!');
+    const userswithRole = userData.map((user) => {
+      
+      return { ...user, role: roles[0] };
+    });
+    const users = await User.insertMany(userswithRole);
+    console.log('Users with roles seeded!', users)
+     
 
-    const users = await User.create(userData);
-    console.log('Users seeded!');
-
-    console.log('Products seeded!');
+   
     process.exit(0);
   } catch (error) {
     throw error;

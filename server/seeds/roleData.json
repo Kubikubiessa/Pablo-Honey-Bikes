@@ -5,7 +5,10 @@
         { "title": "ManageUsers" },
         { "title": "ManageProducts" },
         { "title": "ManageCategories" },
-        { "title": "ManageOrders" }
+        { "title": "ManageOrders" },
+        { "title": "ViewProducts" },
+        { "title": "PlaceOrder" },
+        { "title": "ViewOrders" }
       ]
     },
     {

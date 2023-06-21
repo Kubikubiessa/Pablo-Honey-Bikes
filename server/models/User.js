@@ -11,10 +11,7 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
     },
-    role: {
-      roleSchema,
-    },
-   
+    
     email: {
       type: String,
       required: true,
@@ -27,6 +24,19 @@ const userSchema = new Schema(
 
       minlength: 5,
     },
+    role: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Role',
+      },
+    ],
+    orders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Order',
+      },
+    ],
+   
 
      
    
