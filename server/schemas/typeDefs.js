@@ -43,7 +43,7 @@ const typeDefs = gql`
     items: [OrderItem!]!
     total: Float!
     status: OrderStatus!
-    user: [User!]!
+    user: User!
   }
 
   type OrderItem {
@@ -107,7 +107,7 @@ const typeDefs = gql`
 
 
     deleteCategory(_id: ID!): ID!
-    addOrder(items: [OrderItemInput!]!, total: Float!, status: String!, user: [UserInput!]!): Order!
+    addOrder(items: [OrderItemInput!]!, total: Float!, status: String!, userId: ID): Order!
     updateOrder(_id: ID!, status: OrderStatus): Order!
     deleteOrder(_id: ID!): ID!
   }

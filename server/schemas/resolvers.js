@@ -102,13 +102,28 @@ const resolvers = {
       }
     },
 
+     
     addProduct: async (
       parent,
-      { productname, description, price, size, width, weight, drill, category },
+      {
+        productname,
+        description,
+        price,
+        size,
+        width,
+        weight,
+        drill,
+        categoryId
+      },
       context,
       info
     ) => {
       try {
+        const category = await Category.findById(categoryId);
+        if (!category) {
+          throw new Error("Category not found");
+        }
+    
         const product = await Product.create({
           productname,
           description,
@@ -121,10 +136,11 @@ const resolvers = {
         });
         return product;
       } catch (error) {
-        console.error("addProduct :", error); //defensive programming
+        console.error("addProduct :", error);
         throw error;
       }
     },
+    
     addCategory: async (parent, { categoryname }, context, info) => {
       try {
         const category = await Category.create({
@@ -136,7 +152,7 @@ const resolvers = {
         throw error;
       }
     },
-    addOrder: async (parent, { items, total, status, user }, context, info) => {
+    addOrder: async (parent, { items, total, status, userId }, context, info) => {
       try {
         // Create an array to store the order items
         const orderItems = [];
@@ -149,20 +165,25 @@ const resolvers = {
           });
           orderItems.push(orderItem._id);
         }
+        const user = await User.findById(userId);
+        if (!user) {
+          throw new Error("User not found");
+        }
     
         // Create the order and associate the order items
         const order = await Order.create({
           items: orderItems,
           total,
           status,
-          user: userId, // Convert user ID to ObjectId
+          user: user._id,// Convert user ID to ObjectId
         });
         //type: Schema.Types.ObjectId
     
         // Update the order reference in the User document
         await User.findByIdAndUpdate(
-          { _id:  user._id },
+           user._id, 
           { $addToSet: { orders: order._id } }
+           
         );
     
         return order;
