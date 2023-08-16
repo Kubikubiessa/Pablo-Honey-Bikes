@@ -1,10 +1,14 @@
 const { AuthenticationError } = require("apollo-server-express");
 const User = require("../models/User");
-const OrderItem = require('../models/OrderItem'); // Import statement for the OrderItem type
+const OrderItem = require("../models/OrderItem"); // Import statement for the OrderItem type
+
 const Product = require("../models/Product");
 const Category = require("../models/Category");
 const Order = require("../models/Order");
 const { signToken } = require("../utils/auth");
+const { authMiddleware } = require("../utils/auth");
+const { requireAuth } = require("../utils/auth"); // Import your requireAuth function
+const { checkAuthorization } = require("../utils/auth"); // Import your requireAuth function
 const fetch = require("node-fetch");
 
 const resolvers = {
@@ -93,7 +97,16 @@ const resolvers = {
   Mutation: {
     addUser: async (parent, { username, email, password, role }) => {
       try {
-        const user = await User.create({ username, email, password, role });
+        const userRole = await Role.findOne({ name: role });
+        if (!userRole) {
+          throw new Error("Role not found");
+        }
+        const user = await User.create({
+          username,
+          email,
+          password,
+          role: userRole._id,
+        });
         const token = signToken(user);
         return { token, user };
       } catch (error) {
@@ -102,7 +115,6 @@ const resolvers = {
       }
     },
 
-     
     addProduct: async (
       parent,
       {
@@ -113,17 +125,18 @@ const resolvers = {
         width,
         weight,
         drill,
-        categoryId
+        categoryId,
       },
       context,
       info
     ) => {
       try {
+         
         const category = await Category.findById(categoryId);
         if (!category) {
           throw new Error("Category not found");
         }
-    
+
         const product = await Product.create({
           productname,
           description,
@@ -140,9 +153,15 @@ const resolvers = {
         throw error;
       }
     },
-    
+
     addCategory: async (parent, { categoryname }, context, info) => {
       try {
+        // Define the required role and scope for this mutation
+        const requiredRole = "admin"; //   based on roles in database
+        const requiredScope = "add_product"; //  based on scopes in database
+
+        // Use the authMiddlware middleware
+        authMiddleware(requiredRole, requiredScope)(parent, args, context);
         const category = await Category.create({
           categoryname,
         });
@@ -152,47 +171,57 @@ const resolvers = {
         throw error;
       }
     },
-    addOrder: async (parent, { items, total, status, userId }, context, info) => {
+    addOrder: async (parent, { items, status, userId }, context, info) => {
       try {
         // Create an array to store the order items
-        const orderItems = [];
-    
-        // Iterate through the items array and create order items
-        for (const item of items) {
-          const orderItem = await OrderItem.create({
-            product: item.productId,
-            quantity: item.quantity,
-          });
-          orderItems.push(orderItem._id);
-        }
+        const orderItems = await Promise.all(
+          items.map(async (item) => {
+            return await OrderItem.create({
+              product: item.productId,
+              quantity: item.quantity,
+            });
+          })
+        );
+        //   const orderItems =  items.map( async (item) => {
+        //     return await OrderItem.create({
+        //       product: item.productId,
+        //       quantity: item.quantity,
+        //     }
+
+        // )
+        //   });
+
+        const total = items.reduce(async (acc, curr) => {
+          const { price } = await Product.findById(curr.productId);
+          return acc + price * curr.quantity;
+        }, 0);
+
         const user = await User.findById(userId);
         if (!user) {
           throw new Error("User not found");
         }
-    
+
         // Create the order and associate the order items
         const order = await Order.create({
           items: orderItems,
-          total,
           status,
-          user: user._id,// Convert user ID to ObjectId
+          total,
+          user: user._id, // Convert user ID to ObjectId
         });
         //type: Schema.Types.ObjectId
-    
+
         // Update the order reference in the User document
-        await User.findByIdAndUpdate(
-           user._id, 
-          { $addToSet: { orders: order._id } }
-           
-        );
-    
+        await User.findByIdAndUpdate(user._id, {
+          $addToSet: { orders: order._id },
+        });
+
         return order;
       } catch (error) {
         console.error("addOrder:", error);
         throw error;
       }
     },
-    
+
     // addOrder: async (parent, { items, total, status, user }, context, info) => {
     //   try {
     //     // Create an array to store the order items
@@ -305,7 +334,12 @@ const resolvers = {
       );
       return updatedProduct;
     },
-    updateCategory: async (parent, { _id, categoryname, products }, context, info) => {
+    updateCategory: async (
+      parent,
+      { _id, categoryname, products },
+      context,
+      info
+    ) => {
       try {
         const updatedCategory = await Category.findByIdAndUpdate(
           _id,
@@ -318,7 +352,6 @@ const resolvers = {
         throw error;
       }
     },
-    
 
     // All delete processes of the database
 
@@ -338,6 +371,7 @@ const resolvers = {
 
     deleteProduct: async (parent, { _id }) => {
       try {
+        
         const deletedProduct = await Product.findOneAndDelete(_id);
 
         await Category.findOneAndUpdate(
