@@ -2,6 +2,29 @@ const jwt = require("jsonwebtoken");
 
 const secret = "mysecretssshhhhhhh";
 const expiration = "2h";
+const checkAuthorization = (requiredRole, requiredScope) => {
+  return (parent, args, context) => {
+    const userRole = context.user.role.name;
+    const userScopes = context.user.role.scope.map(scope => scope.title);
+    
+    if (userRole !== requiredRole || !userScopes.includes(requiredScope)) {
+      throw new Error("Not authorized");
+    }
+  };
+};
+
+const requireAuth = (requiredRole, requiredScope) => (resolverFunction) => {
+  return async (parent, args, context, info) => {
+    try {
+      checkAuthorization(requiredRole, requiredScope)(parent, args, context);
+      return await resolverFunction(parent, args, context, info);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+};
+
 
 module.exports = {
   authMiddleware: function ({ req }) {
@@ -22,6 +45,7 @@ module.exports = {
       const { data } = jwt.verify(token, secret, { maxAge: expiration });
       console.log(data)
       req.user = data;
+     
     } catch {
       console.log("Invalid token");
     }
@@ -33,4 +57,7 @@ module.exports = {
     const payload = { email, name, _id, role };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
+  requireAuth,
+  checkAuthorization
+
 };
