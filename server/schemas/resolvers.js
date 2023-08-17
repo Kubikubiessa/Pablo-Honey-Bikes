@@ -8,7 +8,7 @@ const Order = require("../models/Order");
 const { signToken } = require("../utils/auth");
 const { authMiddleware } = require("../utils/auth");
 const { requireAuth } = require("../utils/auth"); // Import your requireAuth function
-const { checkAuthorization } = require("../utils/auth"); // Import your requireAuth function
+//const { checkAuthorization } = require("../utils/auth"); // Import your requireAuth function
 const fetch = require("node-fetch");
 
 const resolvers = {
@@ -95,9 +95,9 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (parent, { username, email, password, role }) => {
+    addUser: async (parent, { username, email, password }) => {
       try {
-        const userRole = await Role.findOne({ name: role });
+        const userRole = await Role.findOne({ name: 'user' });
         if (!userRole) {
           throw new Error("Role not found");
         }
@@ -154,11 +154,11 @@ const resolvers = {
       }
     },
 
-    addCategory: async (parent, { categoryname }, context, info) => {
+    addCategory: requireAuth('add_category', async (parent, { categoryname }, context, info) => {
       try {
         // Define the required role and scope for this mutation
-        const requiredRole = "admin"; //   based on roles in database
-        const requiredScope = "add_product"; //  based on scopes in database
+        // const requiredRole = "admin"; //   based on roles in database
+        // const requiredScope = "add_product"; //  based on scopes in database
 
         // Use the authMiddlware middleware
         authMiddleware(requiredRole, requiredScope)(parent, args, context);
@@ -170,7 +170,7 @@ const resolvers = {
         console.error("addCategory :", error); //defensive programming
         throw error;
       }
-    },
+    }),
     addOrder: async (parent, { items, status, userId }, context, info) => {
       try {
         // Create an array to store the order items
