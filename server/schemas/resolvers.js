@@ -1,7 +1,7 @@
 const { AuthenticationError } = require("apollo-server-express");
 const User = require("../models/User");
 const OrderItem = require("../models/OrderItem"); // Import statement for the OrderItem type
-
+const Role = require("../models/Role");
 const Product = require("../models/Product");
 const Category = require("../models/Category");
 const Order = require("../models/Order");
@@ -115,7 +115,7 @@ const resolvers = {
       }
     },
 
-    addProduct: async (
+    addProduct: requireAuth('add_product', async (
       parent,
       {
         productname,
@@ -152,16 +152,13 @@ const resolvers = {
         console.error("addProduct :", error);
         throw error;
       }
-    },
+    }),
 
     addCategory: requireAuth('add_category', async (parent, { categoryname }, context, info) => {
       try {
-        // Define the required role and scope for this mutation
-        // const requiredRole = "admin"; //   based on roles in database
-        // const requiredScope = "add_product"; //  based on scopes in database
-
+         
         // Use the authMiddlware middleware
-        authMiddleware(requiredRole, requiredScope)(parent, args, context);
+        // authMiddleware(requiredScope)(parent, args, context);
         const category = await Category.create({
           categoryname,
         });
@@ -171,6 +168,7 @@ const resolvers = {
         throw error;
       }
     }),
+
     addOrder: async (parent, { items, status, userId }, context, info) => {
       try {
         // Create an array to store the order items
@@ -182,14 +180,7 @@ const resolvers = {
             });
           })
         );
-        //   const orderItems =  items.map( async (item) => {
-        //     return await OrderItem.create({
-        //       product: item.productId,
-        //       quantity: item.quantity,
-        //     }
-
-        // )
-        //   });
+       
 
         const total = items.reduce(async (acc, curr) => {
           const { price } = await Product.findById(curr.productId);
@@ -207,8 +198,7 @@ const resolvers = {
           status,
           total,
           user: user._id, // Convert user ID to ObjectId
-        });
-        //type: Schema.Types.ObjectId
+        }); 
 
         // Update the order reference in the User document
         await User.findByIdAndUpdate(user._id, {
@@ -221,41 +211,7 @@ const resolvers = {
         throw error;
       }
     },
-
-    // addOrder: async (parent, { items, total, status, user }, context, info) => {
-    //   try {
-    //     // Create an array to store the order items
-    //     const orderItems = [];
-
-    //     // Iterate through the items array and create order items
-    //     for (const item of items) {
-    //       const orderItem = await OrderItem.create({
-    //         product: item.productId,
-    //         quantity: item.quantity,
-    //       });
-    //       orderItems.push(orderItem._id);
-    //     }
-
-    //     // Create the order and associate the order items
-    //     const order = await Order.create({
-    //       items: orderItems,
-    //       total,
-    //       status,
-    //       user
-    //     });
-
-    //     // Update the order reference in the User document
-    //     await User.findByIdAndUpdate(
-    //       { _id: user._id },
-    //       { $addToSet: { orders: order._id } }
-    //     );
-
-    //     return order;
-    //   } catch (error) {
-    //     console.error("addOrder:", error);
-    //     throw error;
-    //   }
-    // },
+ 
 
     //all Update processes of the database
     updateOrder: async (parent, { _id, items, status }, context, info) => {
@@ -303,7 +259,7 @@ const resolvers = {
       }
     },
 
-    updateProduct: async (
+    updateProduct: requireAuth('update_product', async (
       parent,
       {
         _id,
@@ -333,8 +289,8 @@ const resolvers = {
         { new: true }
       );
       return updatedProduct;
-    },
-    updateCategory: async (
+    }),
+    updateCategory: requireAuth('update_category',async (
       parent,
       { _id, categoryname, products },
       context,
@@ -351,7 +307,7 @@ const resolvers = {
         console.error("updateCategory:", error);
         throw error;
       }
-    },
+    }),
 
     // All delete processes of the database
 
@@ -369,7 +325,7 @@ const resolvers = {
       }
     },
 
-    deleteProduct: async (parent, { _id }) => {
+    deleteProduct: requireAuth('delete_product',async (parent, { _id }) => {
       try {
         
         const deletedProduct = await Product.findOneAndDelete(_id);
@@ -383,8 +339,8 @@ const resolvers = {
         console.error("deletedProduct:", error);
         throw error;
       }
-    },
-    deleteCategory: async (parent, { _id }) => {
+    }),
+    deleteCategory: requireAuth('delete_category',async (parent, { _id }) => {
       try {
         const deletedCategory = await Category.findOneAndDelete(_id);
         await Product.updateMany(
@@ -396,7 +352,7 @@ const resolvers = {
         console.error("deletedCategory:", error);
         throw error;
       }
-    },
+    }),
 
     deleteOrder: async (parent, { _id }, context, info) => {
       try {
