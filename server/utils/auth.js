@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 
 const secret = "mysecretssshhhhhhh";
 const expiration = "2h";
+
+
 const checkAuthorization = (requiredScope) => {
   return (parent, args, context) => {
     const userScopes = context.user.role.scope.map((scope) => scope.title);

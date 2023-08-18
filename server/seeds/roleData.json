@@ -2,21 +2,25 @@
     {
       "name": "Admin",
       "scope": [
-        { "title": "ManageUsers" },
-        { "title": "ManageProducts" },
-        { "title": "ManageCategories" },
-        { "title": "ManageOrders" },
-        { "title": "ViewProducts" },
-        { "title": "PlaceOrder" },
-        { "title": "ViewOrders" }
+        { "title": "manage_users" },
+        { "title": "add_product" },
+        { "title": "update_product" },
+        { "title": "delete_product" },
+        { "title": "add_category" },
+        { "title": "update)category" },
+        { "title": "delete_category" },
+        { "title": "manage_orders" },
+        { "title": "view_products" },
+        { "title": "place_order" },
+        { "title": "view_orders" }
       ]
     },
     {
       "name": "Customer",
       "scope": [
-        { "title": "ViewProducts" },
-        { "title": "PlaceOrder" },
-        { "title": "ViewOrders" }
+        { "title": "view_products" },
+        { "title": "place_order" },
+        { "title": "view_orders" }
       ]
     }
   ]
