@@ -1,32 +1,45 @@
 [
     {
-      "username": "user1",
-      "email": "user1@example.com",
+      "username": "pablo",
+      "email": "skyhogg4273@yahoo.com",
       "password": "password1",
       "role": {
         "name": "Admin",
         "scope": [
           {
-            "title":  "ManageUsers" 
+            "title":  "manage_users" 
           },
           {
-            "title": "ManageProducts"
+            "title": "add_product"
           },
           {
-            "title": "ManageCategories"
+            "title": "delete_product"
           },
           {
-            "title": "ManageOrders"
+            "title": "update_product"
           },
           {
-            "title":"ViewProducts"
+            "title": "add_category"
           },
           {
-            "title": "PlaceOrder"
+            "title": "delete_category"
           },
           {
-            "title": "ViewOrders"
-          }
+            "title": "update_category"
+          },
+          {
+            "title": "add_order"
+          },  
+          {
+            "title": "view_orders"
+          },
+          {
+            "title": "delete_order"
+          },
+          {
+            "title": "update_order"
+          },  
+           { "title": "manage_orders" }
         ]
       }
     },
@@ -38,13 +51,16 @@
         "name": "Customer",
         "scope": [
           {
-            "title":"ViewProducts"
+            "title": "add_order"
+          },  
+          {
+            "title": "view_orders"
           },
           {
-            "title": "PlaceOrder"
+            "title": "delete_order"
           },
           {
-            "title": "ViewOrders"
+            "title": "update_order"
           }
         ]
       }

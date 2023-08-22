@@ -1,4 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
+const bcrypt = require('bcrypt'); 
 const User = require("../models/User");
 const OrderItem = require("../models/OrderItem"); // Import statement for the OrderItem type
 const Role = require("../models/Role");
@@ -7,7 +8,9 @@ const Category = require("../models/Category");
 const Order = require("../models/Order");
 const { signToken } = require("../utils/auth");
 const { authMiddleware } = require("../utils/auth");
-const { requireAuth } = require("../utils/auth"); // Import your requireAuth function
+const { requireAuth } = require("../utils/auth"); 
+const { getRoleIdByName } = require ("../utils/getRoleIdByName")
+// Import your requireAuth function
 //const { checkAuthorization } = require("../utils/auth"); // Import your requireAuth function
 const fetch = require("node-fetch");
 
@@ -97,15 +100,16 @@ const resolvers = {
   Mutation: {
     addUser: async (parent, { username, email, password }) => {
       try {
-        const userRole = await Role.findOne({ name: 'user' });
-        if (!userRole) {
-          throw new Error("Role not found");
-        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+         const userRole = await Role.findOne({ name: 'Customer' });
+         if (!userRole) {
+           throw new Error("Role not found");
+         }
         const user = await User.create({
           username,
           email,
-          password,
-          role: userRole._id,
+          hashedPassword,
+         role: userRole._id,
         });
         const token = signToken(user);
         return { token, user };
@@ -114,7 +118,33 @@ const resolvers = {
         throw error;
       }
     },
-
+    addAdmin: async (parent, { username, email, password, desiredRole }, context) => {
+      try {
+        // Check if the authenticated user has the necessary permissions
+        if (!context.user || context.user.role.name !== "Admin") {
+          throw new Error("You don't have the necessary permissions to create this user.");
+        }
+    
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+        // Retrieve the ObjectId reference of the desired Role
+        const desiredRoleId = getRoleIdByName(desiredRole); // I implemented this function in separate file in utils folder
+    
+        const user = await User.create({
+          username,
+          email,
+          password: hashedPassword,
+          role: desiredRoleId,
+        });
+    
+        const token = signToken(user);
+        return { token, user };
+      } catch (error) {
+        console.error("addAdmin:", error);
+        throw error;
+      }
+    },
+    
     addProduct: requireAuth('add_product', async (
       parent,
       {
@@ -131,28 +161,73 @@ const resolvers = {
       info
     ) => {
       try {
-         
+        if (!context.user|| !context.user.role) {
+          throw new AuthenticationError("Not authenticated");
+        }
+    
         const category = await Category.findById(categoryId);
         if (!category) {
           throw new Error("Category not found");
         }
-
         const product = await Product.create({
-          productname,
-          description,
-          price,
-          size,
-          width,
-          weight,
-          drill,
-          category: category._id,
-        });
-        return product;
-      } catch (error) {
-        console.error("addProduct :", error);
-        throw error;
-      }
+                productname,
+                description,
+                price,
+                size,
+                width,
+                weight,
+                drill,
+                category: category._id,
+              });
+              return product;
+            } catch (error) {
+              console.error("addProduct :", error);
+              throw error;
+            }
+    
+       
+       
     }),
+    
+
+    // addProduct: requireAuth('add_product', async (
+    //   parent,
+    //   {
+    //     productname,
+    //     description,
+    //     price,
+    //     size,
+    //     width,
+    //     weight,
+    //     drill,
+    //     categoryId,
+    //   },
+    //   context,
+    //   info
+    // ) => {
+    //   try {
+         
+    //     const category = await Category.findById(categoryId);
+    //     if (!category) {
+    //       throw new Error("Category not found");
+    //     }
+
+    //     const product = await Product.create({
+    //       productname,
+    //       description,
+    //       price,
+    //       size,
+    //       width,
+    //       weight,
+    //       drill,
+    //       category: category._id,
+    //     });
+    //     return product;
+    //   } catch (error) {
+    //     console.error("addProduct :", error);
+    //     throw error;
+    //   }
+    // }),
 
     addCategory: requireAuth('add_category', async (parent, { categoryname }, context, info) => {
       try {
@@ -372,7 +447,8 @@ const resolvers = {
       }
     },
 
-    //all login processes
+    //all login pro 
+    
     login: async (parent, { email, password }) => {
       try {
         console.log("login: ", email, password);
