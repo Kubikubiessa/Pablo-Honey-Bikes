@@ -24,12 +24,12 @@ const userSchema = new Schema(
 
       minlength: 5,
     },
-    role: [
+    role: 
       {
         type: Schema.Types.ObjectId,
         ref: 'Role',
       },
-    ],
+    
     orders: [
       {
         type: Schema.Types.ObjectId,

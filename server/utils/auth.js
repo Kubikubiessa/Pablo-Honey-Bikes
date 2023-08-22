@@ -4,6 +4,7 @@ const secret = "mysecretssshhhhhhh";
 const expiration = "2h";
 
 
+
 const checkAuthorization = (requiredScope) => {
   return (parent, args, context) => {
     const userScopes = context.user.role.scope.map((scope) => scope.title);
@@ -14,7 +15,7 @@ const checkAuthorization = (requiredScope) => {
   };
 };
 
-const requireAuth = (requiredScope, resolverFunction) => {
+ const requireAuth = (requiredScope, resolverFunction) => {
   return async (parent, args, context, info) => {
     try {
       checkAuthorization(requiredScope)(parent, args, context);
@@ -24,8 +25,7 @@ const requireAuth = (requiredScope, resolverFunction) => {
       throw error;
     }
   };
-};
-
+}
 module.exports = {
   authMiddleware: function ({ req }) {
     // allows token to be sent via req.body, req.query, or headers
@@ -48,6 +48,7 @@ module.exports = {
     } catch {
       console.log("Invalid token");
     }
+    
 
     // return the request object so it can be passed to the resolver as `context`
     return req;

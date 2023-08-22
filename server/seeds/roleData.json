@@ -7,7 +7,7 @@
         { "title": "update_product" },
         { "title": "delete_product" },
         { "title": "add_category" },
-        { "title": "update)category" },
+        { "title": "update_category" },
         { "title": "delete_category" },
         { "title": "manage_orders" },
         { "title": "view_products" },
