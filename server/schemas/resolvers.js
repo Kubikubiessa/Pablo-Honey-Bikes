@@ -7,7 +7,7 @@ const Product = require("../models/Product");
 const Category = require("../models/Category");
 const Order = require("../models/Order");
 const { signToken } = require("../utils/auth");
-const { authMiddleware } = require("../utils/auth");
+//const { authMiddleware } = require("../utils/auth");
 const { requireAuth } = require("../utils/auth"); 
 const { getRoleByName } = require ("../utils/getRoleByName")
  
@@ -34,6 +34,15 @@ const resolvers = {
         return users;
       } catch (error) {
         console.error("users:", error);
+        throw error;
+      }
+    },
+    user: async (parent, { _id }, context, info) => {
+      try {
+        const user = await User.findById(_id).populate("role").populate("orders");
+        return user;
+      } catch (error) {
+        console.error("user:", error);
         throw error;
       }
     },
@@ -168,45 +177,7 @@ const resolvers = {
        
     }),
     
-
-    // addProduct: requireAuth('add_product', async (
-    //   parent,
-    //   {
-    //     productname,
-    //     description,
-    //     price,
-    //     size,
-    //     width,
-    //     weight,
-    //     drill,
-    //     categoryId,
-    //   },
-    //   context,
-    //   info
-    // ) => {
-    //   try {
-         
-    //     const category = await Category.findById(categoryId);
-    //     if (!category) {
-    //       throw new Error("Category not found");
-    //     }
-
-    //     const product = await Product.create({
-    //       productname,
-    //       description,
-    //       price,
-    //       size,
-    //       width,
-    //       weight,
-    //       drill,
-    //       category: category._id,
-    //     });
-    //     return product;
-    //   } catch (error) {
-    //     console.error("addProduct :", error);
-    //     throw error;
-    //   }
-    // }),
+ 
 
     addCategory: requireAuth('add_category', async (parent, { categoryname }, context, info) => {
       try {
@@ -432,13 +403,13 @@ const resolvers = {
       try {
         console.log("login: ", email, password);
         const user = await User.findOne({ email });
-
+        console.log('user:', user);
         if (!user) {
           throw new AuthenticationError("No profile with this email found!");
         }
 
-        const correctPw = await user.isCorrectPassword(password);
-
+        const correctPw = await user.isCorrectPassword(password); 
+        console.log('correct password:', correctPw);
         if (!correctPw) {
           throw new AuthenticationError("Incorrect password!");
         }
