@@ -21,7 +21,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-
+      trim: true,
       minlength: 5,
     },
     role: 
@@ -61,7 +61,9 @@ userSchema.pre("save", async function (next) {
 
 // compare the incoming password with the hashed password
 userSchema.methods.isCorrectPassword = async function (password) {
+  console.log('comparing passwords:', password, this.password);
   return bcrypt.compare(password, this.password);
+ 
 };
 
  

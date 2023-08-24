@@ -1,8 +1,8 @@
 [
     {
-      "username": "pablo",
-      "email": "skyhogg4273@yahoo.com",
-      "password": "password1",
+      "username": "heidi",
+      "email": "heidi@yahoo.com",
+      "password": "password3",
       "role": {
         "name": "Admin",
         "scope": [
