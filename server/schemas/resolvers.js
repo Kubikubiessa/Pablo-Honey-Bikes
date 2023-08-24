@@ -9,9 +9,9 @@ const Order = require("../models/Order");
 const { signToken } = require("../utils/auth");
 const { authMiddleware } = require("../utils/auth");
 const { requireAuth } = require("../utils/auth"); 
-const { getRoleIdByName } = require ("../utils/getRoleIdByName")
-// Import your requireAuth function
-//const { checkAuthorization } = require("../utils/auth"); // Import your requireAuth function
+const { getRoleByName } = require ("../utils/getRoleByName")
+ 
+//const { checkAuthorization } = require("../utils/auth"); // Import  requireAuth function
 const fetch = require("node-fetch");
 
 const resolvers = {
@@ -98,51 +98,30 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (parent, { username, email, password }) => {
-      try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-         const userRole = await Role.findOne({ name: 'Customer' });
-         if (!userRole) {
-           throw new Error("Role not found");
-         }
-        const user = await User.create({
-          username,
-          email,
-          hashedPassword,
-         role: userRole._id,
-        });
-        const token = signToken(user);
-        return { token, user };
-      } catch (error) {
-        console.error("addUser :", error);
-        throw error;
-      }
-    },
-    addAdmin: async (parent, { username, email, password, desiredRole }, context) => {
-      try {
-        // Check if the authenticated user has the necessary permissions
-        if (!context.user || context.user.role.name !== "Admin") {
+    
+    addUser: async (parent, { username, email, password, desiredRole }, context) => {
+     
+        const desiredRoleName = await getRoleByName(desiredRole); // I implemented this function in separate file in utils folder
+        // Checking if the authenticated user has the necessary permission to create an admin account
+        if (desiredRoleName == "Admin" // admin name instead of previous admin ObjectID, which is more dynamic, using hard-coded IDs require DB work when transitioning to another DB.
+         && !context.user || context.user.role.name !== "Admin") {
           throw new Error("You don't have the necessary permissions to create this user.");
         }
     
         const hashedPassword = await bcrypt.hash(password, 10);
     
         // Retrieve the ObjectId reference of the desired Role
-        const desiredRoleId = getRoleIdByName(desiredRole); // I implemented this function in separate file in utils folder
-    
+       
         const user = await User.create({
           username,
           email,
           password: hashedPassword,
-          role: desiredRoleId,
+          role: desiredRoleName,
         });
     
         const token = signToken(user);
         return { token, user };
-      } catch (error) {
-        console.error("addAdmin:", error);
-        throw error;
-      }
+      
     },
     
     addProduct: requireAuth('add_product', async (
