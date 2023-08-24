@@ -28,6 +28,13 @@ app.use(cors(corsOptions)); // Use this after the variable declaration
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+// Handle errors at a higher level
+app.use((err, req, res, next) => {
+  console.error("Error:", err);
+  // Handle error responses to the client
+  res.status(err.status || 500).json({ error: err.message });
+});
+
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => {
