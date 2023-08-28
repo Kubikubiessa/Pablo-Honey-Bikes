@@ -402,13 +402,15 @@ const resolvers = {
     login: async (parent, { email, password }) => {
       try {
         console.log("login: ", email, password);
+        console.log("Received password:", password);
         const user = await User.findOne({ email });
+        console.log("Stored hashed password:", user.password);
         console.log('user:', user);
         if (!user) {
           throw new AuthenticationError("No profile with this email found!");
         }
 
-        const correctPw = await user.isCorrectPassword(password); 
+        const correctPw = await user.isCorrectPassword(password.trim()); 
         console.log('correct password:', correctPw);
         if (!correctPw) {
           throw new AuthenticationError("Incorrect password!");
