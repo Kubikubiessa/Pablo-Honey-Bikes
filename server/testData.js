@@ -4,11 +4,7 @@ const bcrypt = require('bcrypt');
 //const mongoose = require('mongoose');
 const User = require('./models/User');  
 
-// Connect to your MongoDB database
-// mongoose.connect('mongodb://localhost:27017/db', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
+ 
 
 async function setupTestData(db) {
   try {
@@ -30,9 +26,7 @@ async function setupTestData(db) {
   } catch (error) {
     console.error('Error setting up test data:', error);
   }
-//   } finally {
-//     mongoose.disconnect();
-//   }
+ 
 }
 
 // Call the function to set up test data
