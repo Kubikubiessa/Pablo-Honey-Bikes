@@ -8,14 +8,14 @@ const User = require('./models/User');
 
 async function setupTestData(db) {
   try {
-    const hashedPassword = await bcrypt.hash('password1', 10);
+    // const hashedPassword = await bcrypt.hash('password1', 10);
     const adminRoleId = "64e7deeb25bfa52a3e638d76" //64e7deeb25bfa52a3e638d76
 
     // Create and save an admin user with hashed password
     const adminUser = await User.create({
       username: 'pablo',
       email: 'skyhogg4273@yahoo.com',
-      password: hashedPassword,
+      password: 'password1',
       role: adminRoleId, // Assign the role ID
     });
     //const token = signToken(user);

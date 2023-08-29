@@ -49,7 +49,7 @@ const userSchema = new Schema(
   }
 );
 
-// set up pre-save middleware to create password
+//set up pre-save middleware to create password
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
@@ -64,10 +64,11 @@ userSchema.pre("save", async function (next) {
  
  
 userSchema.methods.isCorrectPassword = async function (password) {
-  console.log('comparing passwords:', password, this.password);
+  // console.log('comparing passwords:', password, this.password);
   const result = await bcrypt.compare(password.trim(), this.password);
-  console.log('comparing bcrypt.compared passwords:', password, this.password)
-  console.log('password comparison result:', result);
+ 
+  // console.log('comparing bcrypt.compared passwords:', password, this.password)
+  // console.log('password comparison result:', result);
   return result;
 };
 
