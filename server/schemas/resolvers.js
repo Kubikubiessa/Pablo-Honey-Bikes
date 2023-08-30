@@ -7,7 +7,7 @@ const Product = require("../models/Product");
 const Category = require("../models/Category");
 const Order = require("../models/Order");
 const { signToken } = require("../utils/auth");
-//const { authMiddleware } = require("../utils/auth");
+const { authMiddleware } = require("../utils/auth");
 const { requireAuth } = require("../utils/auth"); 
 const { getRoleByName } = require ("../utils/getRoleByName")
  
@@ -148,8 +148,12 @@ const resolvers = {
       context,
       info
     ) => {
+      console.log('context:', context)
       try {
-        if (!context.user|| !context.user.role) {
+        const userData = context.user;
+        const userRole = userData.role;
+        console.log('user data and role:', userData, userRole)
+        if (!userData|| !userRole) {
           throw new AuthenticationError("Not authenticated");
         }
     
@@ -401,10 +405,10 @@ const resolvers = {
     
     login: async (parent, { email, password }) => {
       try {
-        console.log("login: ", email, password);
-        console.log("Received password:", password);
-        const user = await User.findOne({ email });
-        console.log("Stored hashed password:", user.password);
+        // console.log("login: ", email, password);
+        // console.log("Received password:", password);
+        const user = await User.findOne({ email }).populate("role");
+        
         console.log('user:', user);
         if (!user) {
           throw new AuthenticationError("No profile with this email found!");
