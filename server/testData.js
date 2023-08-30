@@ -3,20 +3,23 @@ const db = require("./config/connection");
 const bcrypt = require('bcrypt');
 //const mongoose = require('mongoose');
 const User = require('./models/User');  
+const Role = require('./models/Role')
 
  
 
 async function setupTestData(db) {
   try {
     // const hashedPassword = await bcrypt.hash('password1', 10);
-    const adminRoleId = "64e7deeb25bfa52a3e638d76" //64e7deeb25bfa52a3e638d76
-
+    const adminRole = await Role.findOne({ name: "Admin" }); // Query the admin role
+    if (!adminRole) {
+      throw new Error("Admin role not found");
+    }
     // Create and save an admin user with hashed password
     const adminUser = await User.create({
       username: 'pablo',
       email: 'skyhogg4273@yahoo.com',
       password: 'password1',
-      role: adminRoleId, // Assign the role ID
+      role: adminRole._id, // Assign the role ID dynamically
     });
     //const token = signToken(user);
      console.log('Admin user created successfully.', adminUser );

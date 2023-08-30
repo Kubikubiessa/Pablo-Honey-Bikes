@@ -26,12 +26,15 @@ const userSchema = new Schema(
     },
     role: 
       {
+        //roleSchema
+
         type: Schema.Types.ObjectId,
         ref: 'Role',
       },
     
     orders: [
       {
+       
         type: Schema.Types.ObjectId,
         ref: 'Order',
       },
