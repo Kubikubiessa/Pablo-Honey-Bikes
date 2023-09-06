@@ -28,26 +28,40 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in");
     },
-    users: async (parent, args, context, info) => {
+    users: requireAuth("manage_users", async (parent, args, context, info) => {
       try {
+        const userData = context.user;
+        const userRole = userData.role;
+        if (!userData || !userRole) {
+          throw new AuthenticationError("Not authenticated");
+        }
         const users = await User.find().populate("role").populate("orders");
         return users;
       } catch (error) {
         console.error("users:", error);
         throw error;
       }
-    },
-    user: async (parent, { _id }, context, info) => {
-      try {
-        const user = await User.findById(_id)
-          .populate("role")
-          .populate("orders");
-        return user;
-      } catch (error) {
-        console.error("user:", error);
-        throw error;
+    }),
+    user: requireAuth(
+      "manage_users",
+      async (parent, { _id }, context, info) => {
+        try {
+          const userData = context.user;
+          const userRole = userData.role;
+
+          if (!userData || !userRole) {
+            throw new AuthenticationError("Not authenticated");
+          }
+          const user = await User.findById(_id)
+            .populate("role")
+            .populate("orders");
+          return user;
+        } catch (error) {
+          console.error("user:", error);
+          throw error;
+        }
       }
-    },
+    ),
 
     product: async (parent, { _id }, context, info) => {
       try {
@@ -213,93 +227,130 @@ const resolvers = {
       }
     ),
 
-    addOrder: async (parent, { items, status, userId }, context, info) => {
-      try {
-        // Create an array to store the order items
-        const orderItems = await Promise.all(
-          items.map(async (item) => {
-            return await OrderItem.create({
-              product: item.productId,
-              quantity: item.quantity,
-            });
-          })
-        );
+    addOrder: requireAuth(
+      "place_order",
+      async (parent, { items, status, userId }, context, info) => {
+        try {
+          const userData = context.user;
+          const userRole = userData.role;
+          const userId = userData._id;
+          //console.log("user data and role:", userData, userRole);
+          if (!userData || !userRole) {
+            throw new AuthenticationError("Not authenticated");
+          }
+          // Create an array to store the order items
 
-        const total = items.reduce(async (acc, curr) => {
-          const { price } = await Product.findById(curr.productId);
-          return acc + price * curr.quantity;
-        }, 0);
+          const orderItems = await Promise.all(
+            items.map(async (item) => {
+              const product = await Product.findById(item.productId);
 
-        const user = await User.findById(userId);
-        if (!user) {
-          throw new Error("User not found");
-        }
+              if (!product) {
+                throw new Error(`Product with ID ${item.productId} not found.`);
+              }
 
-        // Create the order and associate the order items
-        const order = await Order.create({
-          items: orderItems,
-          status,
-          total,
-          user: user._id, // Convert user ID to ObjectId
-        });
+              // Ensuring the product field contains all necessary fields
+              const orderItem = await OrderItem.create({
+                product: product._id, // Saving the product ID as an ObjectId
+                quantity: item.quantity,
+              });
+              console.log("Order-item:", orderItem);
 
-        // Update the order reference in the User document
-        await User.findByIdAndUpdate(user._id, {
-          $addToSet: { orders: order._id },
-        });
+              return orderItem;
+            })
+          );
 
-        return order;
-      } catch (error) {
-        console.error("addOrder:", error);
-        throw error;
-      }
-    },
+          console.log("order items:", orderItems);
 
-    //all Update processes of the database
-    updateOrder: async (parent, { _id, items, status }, context, info) => {
-      try {
-        // Find the order by orderId
-        const order = await Order.findById(_id);
+          const total = await items.reduce(async (acc, curr) => {
+            // Fetching the product data first
+            const product = await Product.findById(curr.productId);
 
-        if (!order) {
-          throw new Error("Order not found");
-        }
+            // Checking if the product exists and has a valid price
+            if (product && typeof product.price === "number") {
+              // Adding the product price * quantity to the accumulator
+              return acc + product.price * curr.quantity;
+            } else {
+              // Handling the case where the product is not found or has invalid data
 
-        // Clear the existing items
-        order.items = [];
+              return acc;
+            }
+          }, 0);
 
-        // Iterate over the new items
-        for (const item of items) {
-          const { product, quantity } = item;
-
-          // Create a new OrderItem for each item
-          const orderItem = await OrderItem.create({
-            product,
-            quantity,
+          // Creating the order and associate the order items
+          const order = await Order.create({
+            items: orderItems,
+            status,
+            total,
+            user: userId, // Convert user ID to ObjectId
           });
 
-          // Push the OrderItem to the order's items array
-          order.items.push(orderItem);
+          // Updating the order reference in the User document
+          await User.findByIdAndUpdate(userId, {
+            $addToSet: { orders: order._id },
+          });
+          console.log("Order:", order);
+          return order;
+        } catch (error) {
+          console.error("addOrder:", error);
+          throw error;
         }
-
-        // Update the order status
-        order.status = status;
-
-        // Save the updated order
-        await order.save();
-
-        // Update the order reference in the User document
-        await User.findOneAndUpdate(
-          { _id: context.user._id, orders: { $in: [order._id] } },
-          { $set: { "orders.$.status": status } }
-        );
-
-        return order;
-      } catch (error) {
-        console.error("updateOrder:", error);
-        throw error;
       }
-    },
+    ),
+
+    //all Update processes of the database
+    updateOrder: requireAuth(
+      "manage_orders",
+      async (parent, { _id, items, status }, context, info) => {
+        try {
+          const userData = context.user;
+          const userRole = userData.role;
+          // console.log("user data and role:", userData, userRole);
+          if (!userData || !userRole) {
+            throw new AuthenticationError("Not authenticated");
+          }
+          // Find the order by orderId
+          const order = await Order.findById(_id);
+
+          if (!order) {
+            throw new Error("Order not found");
+          }
+
+          // Clear the existing items
+          order.items = [];
+
+          // Iterate over the new items
+          for (const item of items) {
+            const { product, quantity } = item;
+
+            // Create a new OrderItem for each item
+            const orderItem = await OrderItem.create({
+              product,
+              quantity,
+            });
+
+            // Push the OrderItem to the order's items array
+            order.items.push(orderItem);
+          }
+
+          // Update the order status
+          order.status = status;
+
+          // Save the updated order
+          await order.save();
+
+          // Update the order reference in the User document
+          await User.findOneAndUpdate(
+            { _id: context.user._id, orders: { $in: [order._id] } },
+            { $set: { "orders.$.status": status } }
+          );
+
+          return order;
+        } catch (error) {
+          console.error("updateOrder:", error);
+          throw error;
+        }
+      }
+    ),
     updateProduct: requireAuth(
       "update_product",
       async (
@@ -340,9 +391,9 @@ const resolvers = {
           if (price !== undefined) {
             updateFields.price = price;
           }
-           if (size !== undefined) {
-            updateFields.size = size
-           }
+          if (size !== undefined) {
+            updateFields.size = size;
+          }
 
           if (width !== undefined) {
             updateFields.width = width;
@@ -351,13 +402,13 @@ const resolvers = {
             updateFields.weight = weight;
           }
           if (drill !== undefined) {
-            updateFields.drill = drill
+            updateFields.drill = drill;
           }
 
-          // categoryId should be handled separately, as it might be null
+          // categoryId handled separately, as it might be null
 
           if (categoryId !== undefined) {
-            updateFields.category = categoryId; 
+            updateFields.category = categoryId;
           } else if (categoryId === null) {
             // If categoryId is explicitly set to null in the mutation, clear it
             updateFields.category = null;
@@ -444,7 +495,7 @@ const resolvers = {
           const categoryId = deletedProduct.category;
 
           const updatedCategory = await Category.findOneAndUpdate(
-            { _id: categoryId},
+            { _id: categoryId },
             { $pull: { products: deletedProduct._id } }
           );
           console.log("product deleted :", deletedProduct._id);
@@ -468,7 +519,7 @@ const resolvers = {
           const deletedCategory = await Category.findOneAndDelete({ _id: _id });
           const updatedProduct = await Product.updateMany(
             { category: deletedCategory._id },
-            { $set: {category: null } }
+            { $set: { category: null } }
           );
           console.log("deleted category :", deletedCategory._id);
           return updatedProduct;
@@ -482,7 +533,7 @@ const resolvers = {
     deleteOrder: async (parent, { _id }, context, info) => {
       try {
         // Find the order that needs to be deleted
-        const deletedOrder = await Order.findByIdAndDelete(_id);
+        const deletedOrder = await Order.findByIdAndDelete({ _id });
 
         // Remove the order reference from the User document
         await User.findOneAndUpdate(
