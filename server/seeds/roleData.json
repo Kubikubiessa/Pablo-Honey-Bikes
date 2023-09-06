@@ -12,7 +12,8 @@
         { "title": "manage_orders" },
         { "title": "view_products" },
         { "title": "place_order" },
-        { "title": "view_orders" }
+        { "title": "view_orders" },
+        { "title": "view_order" }
       ]
     },
     {
@@ -20,7 +21,8 @@
       "scope": [
         { "title": "view_products" },
         { "title": "place_order" },
-        { "title": "view_orders" }
+        { "title": "view_orders" },
+        { "title": "view_order" }
       ]
     }
   ]
