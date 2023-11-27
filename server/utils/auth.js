@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const secret = "mysecretssshhhhhhh";
-const expiration = "2h";
+const expiration = "4h";
 
 const checkAuthorization = (requiredScope) => {
   return (parent, args, context) => {
@@ -10,8 +10,8 @@ const checkAuthorization = (requiredScope) => {
 
     if (context.user.role) {
       const userScopes = context.user.role.scope.map((scope) => scope.title);
-      console.log("user scope:", userScopes);
-
+      console.log("which user is logged in:", context.user);
+      console.log('user scopes: ', userScopes)
       if (!userScopes.includes(requiredScope)) {
         throw new Error("Not authorized");
       }
@@ -48,20 +48,13 @@ module.exports = {
     try {
       const decoded = jwt.verify(token, secret, { maxAge: expiration });
       req.user = decoded.data;
+      //console.log("Decoded JWT Payload:", decoded);
     } catch (err) {
       console.log("Invalid token");
     }
 
     return req;
-
-    // try {
-    //   const { data } = jwt.verify(token, secret, { maxAge: expiration });
-    //   //console.log('token-based user data:', data);
-    //   req.user = data;
-    //   console.log('token-based user data:', data);
-    // } catch {
-    //   console.log("Invalid token");
-    // }
+ 
   },
   signToken: function ({ email, username, _id, role }) {
     const payload = { email, username, _id, role };

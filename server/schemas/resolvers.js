@@ -16,7 +16,7 @@ const fetch = require("node-fetch");
 
 const resolvers = {
   Query: {
-    // By adding context to our query, we can retrieve the logged in user without specifically searching for them
+  
 
     me: async (parent, args, context) => {
       if (context.user) {
@@ -102,24 +102,150 @@ const resolvers = {
         throw error;
       }
     },
-    order: async (parent, { _id }, context, info) => {
-      try {
-        const order = Order.findById(_id).populate("user");
-        return order;
-      } catch (error) {
-        console.error("order:", error);
-        throw error;
+    customerOrderResolver: async (parent, { _id }, context, info) => {
+      if (context.user) {
+        try {
+          const customerOrder = await Order.findOne({
+            _id,
+            user: context.user._id,
+          })
+            .populate({
+              path: "items",
+              populate: {
+                path: "product",
+                model: "Product",
+                select: "productname price",
+              },
+            })
+            .populate({
+              path: "user",
+              model: "User",
+              select: "username email",
+            });
+
+          if (
+            customerOrder &&
+            customerOrder.items &&
+            customerOrder.items.length > 0
+          ) {
+            return customerOrder;
+          }
+        } catch (error) {
+          console.error("customer order:", error);
+          throw error;
+        }
+      } else {
+        throw new AuthenticationError("Not logged in");
       }
     },
-    orders: async (parent, args, context, info) => {
-      try {
-        const orders = await Order.find().populate("user");
-        return orders;
-      } catch (error) {
-        console.error("orders:", error);
-        throw error;
+    adminOrderResolver: requireAuth(
+      "manage-orders",
+      async (parent, { _id }, context, info) => {
+        if (context.user) {
+          try {
+            const adminOrder = await Order.findById(_id)
+              .populate({
+                path: "items",
+                populate: {
+                  path: "product",
+                  model: "Product",
+                  select: "productname price",
+                },
+              })
+              .populate({
+                path: "user",
+                model: "User",
+                select: "username email",
+              });
+
+            if (adminOrder && adminOrder.items && adminOrder.items.length > 0) {
+              return adminOrder;
+            }
+          } catch (error) {
+            console.error("admin order:", error);
+            throw error;
+          }
+        } else {
+          throw new AuthenticationError("Not logged in");
+        }
+      }
+    ),
+
+    customerOrdersResolver: async (parent, args, context, info) => {
+      if (context.user) {
+        try {
+          const customerOrders = await Order.find({
+            user: context.user._id,
+          })
+            .populate({
+              path: "items",
+              populate: {
+                path: "product",
+                model: "Product",
+                select: "productname price",
+              },
+            })
+            .populate({
+              path: "user",
+              model: "User",
+              select: "username email",
+            });
+
+          if (
+            customerOrders &&
+            customerOrders.items &&
+            customerOrders.items.length > 0
+          ) {
+            return customerOrders;
+          }
+        } catch (error) {
+          console.error("customer orders:", error);
+          throw error;
+        }
+      } else {
+        throw new AuthenticationError("Not logged in");
       }
     },
+
+    adminOrdersResolver: requireAuth(
+      "manage-orders",
+      async (parent, args, context, info) => {
+        if (context.user) {
+          try {
+            const adminOrders = await Order.find()
+              .populate({
+                path: "items",
+                populate: {
+                  path: "product",
+                  model: "Product",
+                  select: "productname price",
+                },
+              })
+              .populate({
+                path: "user",
+                model: "User",
+                select: "username email",
+              })
+              .exec();
+            //console.log("orders to be viewed:", adminOrders);
+            if (
+              !adminOrders ||
+              adminOrders.length === 0 ||
+              adminOrders.items === 0
+            ) {
+              throw new Error("No orders found.");
+            }
+            console.log("orders to be viewed:", adminOrders);
+            return adminOrders || [];
+          } catch (error) {
+            console.error("admin orders:", error);
+            throw error;
+          }
+        } else {
+          throw new AuthenticationError("Not logged in");
+        }
+      }
+    ),
   },
 
   Mutation: {
@@ -157,21 +283,7 @@ const resolvers = {
 
     addProduct: requireAuth(
       "add_product",
-      async (
-        parent,
-        {
-          productname,
-          description,
-          price,
-          size,
-          width,
-          weight,
-          drill,
-          categoryId,
-        },
-        context,
-        info
-      ) => {
+      async (parent, { properties, categoryId }, context, info) => {
         //console.log('context:', context)
         try {
           const userData = context.user;
@@ -187,12 +299,8 @@ const resolvers = {
           }
           const product = await Product.create({
             productname,
-            description,
+            properties,
             price,
-            size,
-            width,
-            weight,
-            drill,
             category: category._id,
           });
           return product;
@@ -208,6 +316,7 @@ const resolvers = {
       async (parent, { categoryname }, context, info) => {
         try {
           const userData = context.user;
+
           const userRole = userData.role;
           console.log("user data and role:", userData, userRole);
           if (!userData || !userRole) {
@@ -234,8 +343,9 @@ const resolvers = {
           const userData = context.user;
           const userRole = userData.role;
           const userId = userData._id;
-          //console.log("user data and role:", userData, userRole);
-          if (!userData || !userRole) {
+          const userName = userData.username;
+
+          if (!userData || !userRole || !userName) {
             throw new AuthenticationError("Not authenticated");
           }
           // Create an array to store the order items
@@ -247,19 +357,22 @@ const resolvers = {
               if (!product) {
                 throw new Error(`Product with ID ${item.productId} not found.`);
               }
+              //console.log('product of order:', product)
+              const productname = product.productname;
 
               // Ensuring the product field contains all necessary fields
               const orderItem = await OrderItem.create({
-                product: product._id, // Saving the product ID as an ObjectId
+                product: product,
                 quantity: item.quantity,
               });
-              console.log("Order-item:", orderItem);
-
+              orderItem.productname = productname;
+              console.log("product name:", productname);
+              //console.log('one order item created:', orderItem)
               return orderItem;
             })
           );
 
-          console.log("order items:", orderItems);
+          //console.log("order items:", orderItems);
 
           const total = await items.reduce(async (acc, curr) => {
             // Fetching the product data first
@@ -275,16 +388,29 @@ const resolvers = {
               return acc;
             }
           }, 0);
-
+          // console.log("order items:", orderItems);
           // Creating the order and associate the order items
           const order = await Order.create({
             items: orderItems,
             status,
             total,
-            user: userId, // Convert user ID to ObjectId
+            user: {
+              _id: userId,
+              username: userName,
+            }, // Convert user ID to ObjectId
           });
+          //   await order.populate({
+          //     path: 'items',
+          // populate: { path: 'product', select: 'productname'
+          //   }}).populate("user")
+          //   ;
+          // await order.populate({path: "items", populate: { path: "product"}});
+          await order.populate("user");
+          await order.populate("items");
 
+          //populating the user field on the order object with the user document from the User collection.
           // Updating the order reference in the User document
+
           await User.findByIdAndUpdate(userId, {
             $addToSet: { orders: order._id },
           });
@@ -353,22 +479,7 @@ const resolvers = {
     ),
     updateProduct: requireAuth(
       "update_product",
-      async (
-        parent,
-        {
-          _id,
-          productname,
-          description,
-          price,
-          size,
-          width,
-          weight,
-          drill,
-          categoryId,
-        },
-        context,
-        info
-      ) => {
+      async (parent, { _id, properties, categoryId }, context, info) => {
         try {
           const userData = context.user;
           const userRole = userData.role;
@@ -378,33 +489,12 @@ const resolvers = {
           }
 
           // Create an object with the fields to update
-          const updateFields = {};
-
-          if (productname !== undefined) {
-            updateFields.productname = productname;
-          }
-
-          if (description !== undefined) {
-            updateFields.description = description;
-          }
-
-          if (price !== undefined) {
-            updateFields.price = price;
-          }
-          if (size !== undefined) {
-            updateFields.size = size;
-          }
-
-          if (width !== undefined) {
-            updateFields.width = width;
-          }
-          if (weight !== undefined) {
-            updateFields.weight = weight;
-          }
-          if (drill !== undefined) {
-            updateFields.drill = drill;
-          }
-
+          const updateFields = {
+            productname,
+            properties: properties,
+            price,
+            category: categoryId,
+          };
           // categoryId handled separately, as it might be null
 
           if (categoryId !== undefined) {

@@ -3,7 +3,7 @@ const { gql } = require("apollo-server-express");
 const typeDefs = gql`
   type User {
     _id: ID!
-    username: String!
+    username: String
     email: String!
     password: String!
     role: Role
@@ -22,14 +22,15 @@ const typeDefs = gql`
 
   type Product {
     _id: ID!
-    productname: String!
-    description: String!
+    productname: String
     price: Float!
-    size: Int
-    width: Float
-    weight: Float
-    drill: Int
+    properties: [Property!]!
     category: Category!
+  }
+
+  type Property {
+    key: String!
+    value: String!
   }
 
   type Category {
@@ -48,7 +49,8 @@ const typeDefs = gql`
 
   type OrderItem {
     _id: ID!
-    product: Product!
+    product: Product
+    productname: String
     quantity: Int!
   }
 
@@ -70,10 +72,12 @@ const typeDefs = gql`
     products(category: ID): [Product!]!
     category(_id: ID!): Category
     categories: [Category!]!
-    order(_id: ID!): Order
-    orders: [Order!]!
     user(_id: ID!): User
     users: [User]!
+    adminOrderResolver(_id: ID!): Order
+    adminOrdersResolver: [Order]
+    customerOrderResolver(_id: ID!): Order
+    customerOrdersResolver: [Order]
   }
 
   type Mutation {
@@ -83,22 +87,15 @@ const typeDefs = gql`
     removeAdmin(_id: ID!): User
     addProduct(
       productname: String!
-      description: String!
+      properties: [PropertyInput!]!
       price: Float!
-      size: Int
-      width: Float
-      weight: Float
-      drill: Int
       categoryId: ID!
     ): Product!
     updateProduct(
       _id: ID!
-      productname: String
-      description: String
-      price: Float
-      width: Float
-      weight: Float
-      drill: Int
+      productname: String!
+      properties: [PropertyInput!]!
+      price: Float!
       categoryId: ID
     ): Product!
     
@@ -118,6 +115,10 @@ const typeDefs = gql`
     username: String!
   }
   
+  input PropertyInput {
+    key: String!
+    value: String!
+  }
 
   input OrderItemInput {
     productId: ID!

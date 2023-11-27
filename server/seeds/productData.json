@@ -2,21 +2,15 @@
   {
     "productname": "Skyline",
     "description": "Product 1 description",
-    "price": 9.99,
-    "size": null,
-    "width": null,
-    "weight": null,
-    "drill": null
+    "price": 9.99
+    
     
   },
   {
     "productname": "Teocalli",
     "description": "Product 2 description",
-    "price": 19.99,
-    "size": null,
-    "width": null,
-    "weight": null,
-    "drill": null
+    "price": 19.99
+    
     
   }
 ]
