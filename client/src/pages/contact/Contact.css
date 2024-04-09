@@ -27,6 +27,15 @@
   flex-wrap: wrap;
 }
 
+form-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers items horizontally in the container */
+  justify-content: center; /* Centers items vertically in the container */
+  /* other styles... */
+}
+
+
 .contactContainer form h1 {
   color: #fff;
   font-weight: 500;

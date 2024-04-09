@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.loginContainer {
+  min-height: 100vh;
+  background: #437270;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginContainer form {
+  width: 670px;
+  height: 300px; /* Adjust height for login form */
+  display: flex;
+  justify-content: center;
+  box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
+  border-radius: 0px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center elements horizontally */
+  padding: 20px; /* Add padding for aesthetics */
+}
+
+.loginContainer form h1 {
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 20px; /* Space between title and input fields */
+  text-align: center;
+}
+
+.loginContainer form input {
+  width: 290px;
+  height: 40px;
+  padding-left: 10px;
+  outline: none;
+  border: none;
+  font-size: 15px;
+  margin-bottom: 20px; /* Increase space between input fields */
+  background: none;
+  border-bottom: 2px solid #fff;
+}
+
+.loginContainer form input::placeholder {
+  color: #ddd;
+}
+
+.loginContainer form button {
+  border: none;
+  background: #fff;
+  border-radius: 0px;
+  margin-top: 20px;
+  font-weight: 600;
+  font-size: 20px;
+  color: #333;
+  width: 100px;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.loginContainer form button:hover {
+  opacity: 0.7;
+}

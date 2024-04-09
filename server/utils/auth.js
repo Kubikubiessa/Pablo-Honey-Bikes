@@ -4,14 +4,17 @@ const secret = "mysecretssshhhhhhh";
 const expiration = "4h";
 
 const checkAuthorization = (requiredScope) => {
+  // console.log("Checking authorization");
+  // console.log("Required scope:", requiredScope);
+ 
   return (parent, args, context) => {
     // console.log('context user:', context.user);
-    // console.log('context user role:', context.user.role);
+    //  console.log('context user role:', context.user.role);
 
-    if (context.user.role) {
+    if (context.user.role && context.user.role) {
       const userScopes = context.user.role.scope.map((scope) => scope.title);
-      console.log("which user is logged in:", context.user);
-      console.log('user scopes: ', userScopes)
+      // console.log("which user is logged in:", context.user);
+      // console.log('user scopes: ', userScopes)
       if (!userScopes.includes(requiredScope)) {
         throw new Error("Not authorized");
       }
@@ -20,7 +23,7 @@ const checkAuthorization = (requiredScope) => {
     }
   };
 };
-
+ 
 const requireAuth = (requiredScope, resolverFunction) => {
   return async (parent, args, context, info) => {
     try {
@@ -35,32 +38,40 @@ const requireAuth = (requiredScope, resolverFunction) => {
 
 module.exports = {
   authMiddleware: function ({ req }) {
-    let token = req.body.token || req.query.token || req.headers.authorization;
-
-    if (req.headers.authorization) {
-      token = token.split(" ").pop().trim();
-    }
-
+    console.log("Auth middleware called");
+    console.log("Request headers:", JSON.stringify(req.headers));
+  
+    let token = req.headers.authorization || '';
+    token = token.replace(/^Bearer\s/, ''); // Remove Bearer prefix if present
+    console.log("Processed Token:", token);
+  
     if (!token) {
-      return req;
+      console.error("No token provided");
+      return { user: null };
     }
-    // if token can be verified, add the decoded user's data to the request so it can be accessed in the resolver
+  
     try {
-      const decoded = jwt.verify(token, secret, { maxAge: expiration });
-      req.user = decoded.data;
-      //console.log("Decoded JWT Payload:", decoded);
+      const decoded = jwt.verify(token, secret, { expiresIn: expiration });
+      console.log("Decoded JWT:", decoded);
+      return { user: decoded.data };
     } catch (err) {
-      console.log("Invalid token");
+      console.error("Invalid token");
+      return { user: null };
     }
-
-    return req;
+  },
+   
  
-  },
+  
   signToken: function ({ email, username, _id, role }) {
-    const payload = { email, username, _id, role };
-    console.log("payload:", payload);
-    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
+    //console.log("Signing token for:", { email, username, _id, role });
+    return jwt.sign(
+      { data: { email, username, _id, role } },
+      secret,
+      { expiresIn: expiration }
+    );
   },
+  
+  
   requireAuth,
   checkAuthorization,
 };

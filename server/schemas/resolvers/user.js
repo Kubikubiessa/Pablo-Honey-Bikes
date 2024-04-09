@@ -1,10 +1,10 @@
 const { AuthenticationError } = require("apollo-server-express");
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
-const Order = require("../models/Order");
-const { signToken } = require("../utils/auth");
-const { requireAuth } = require("../utils/auth");
-const { getRoleByName } = require("../utils/getRoleByName");
+const User = require("../../models/User");
+const Order = require("../../models/Order");
+const { signToken } = require("../../utils/auth");
+const { requireAuth } = require("../../utils/auth");
+const { getRoleByName } = require("../../utils/getRoleByName");
 const fetch = require("node-fetch");
 const userResolvers = {
     Query: {
@@ -57,20 +57,20 @@ const userResolvers = {
     Mutation: {
         addUser: async (
             parent,
-            { username, email, password, desiredRole },
+            { username, email, password, desiredRole = "Customer" },
             context
           ) => {
             const desiredRoleName = await getRoleByName(desiredRole); // I implemented this function in separate file in utils folder
             // Checking if the authenticated user has the necessary permission to create an admin account
-            if (
-              (desiredRoleName == "Admin" && // admin name instead of previous admin ObjectID, which is more dynamic, using hard-coded IDs require DB work when transitioning to another DB.
-                !context.user) ||
-              context.user.role.name !== "Admin"
-            ) {
-              throw new Error(
-                "You don't have the necessary permissions to create this user."
-              );
-            }
+            // if (
+            //   (desiredRoleName == "Admin" && // admin name instead of previous admin ObjectID, which is more dynamic, using hard-coded IDs require DB work when transitioning to another DB.
+            //     !context.user) ||
+            //   context.user.role.name !== "Admin"
+            // ) {
+            //   throw new Error(
+            //     "You don't have the necessary permissions to create this user."
+            //   );
+            // }
       
             const hashedPassword = await bcrypt.hash(password, 10);
       
@@ -80,9 +80,9 @@ const userResolvers = {
               username,
               email,
               password: hashedPassword,
-              role: desiredRoleName,
+              role: desiredRoleName._id,
             });
-      
+            await user.populate('role')
             const token = signToken(user);
             return { token, user };
           },
@@ -92,13 +92,13 @@ const userResolvers = {
               // console.log("Received password:", password);
               const user = await User.findOne({ email }).populate("role");
       
-              console.log("user:", user);
+              // console.log("user:", user);
               if (!user) {
                 throw new AuthenticationError("No profile with this email found!");
               }
       
               const correctPw = await user.isCorrectPassword(password.trim());
-              console.log("correct password:", correctPw);
+              // console.log("correct password:", correctPw);
               if (!correctPw) {
                 throw new AuthenticationError("Incorrect password!");
               }
@@ -111,6 +111,83 @@ const userResolvers = {
               throw e;
             }
           },
+          adminLogin: async (parent, { email, password }, context, info) => {
+            console.log("adminLogin called");
+            try {
+              // Log the received email for diagnostic purposes
+              //console.log("Attempting login for email:", email);
+              
+              // Find the user by email and populate the role
+              const user = await User.findOne({ email }).populate("role");
+              //console.log("User found:", user);
+          
+              // Check if the user object is returned and has a role
+              if (!user) {
+                console.log("No profile with this email found!");
+                throw new AuthenticationError("No profile with this email found!");
+              }
+          
+              // Check if the user has the correct password
+              const correctPw = await user.isCorrectPassword(password.trim());
+              console.log("Password correct:", correctPw);
+              if (!correctPw) {
+                throw new AuthenticationError("Incorrect password!");
+              }
+          
+              // Check user role to ensure they have admin access
+              if (!user.role || user.role.name !== "Admin") {
+                console.log("User does not have Admin role:", user.role);
+                throw new AuthenticationError("You do not have admin permissions.");
+              }
+          
+              // Generate a token for the user
+              const token = signToken(user);
+              console.log("Admin logged in successfully, token:", token);
+          
+              // Return the authentication token and user
+              return { token, user };
+            } catch (e) {
+              console.error("Admin login error:", e);
+              throw e;
+            }
+          },
+          
+          // adminLogin: requireAuth( "manage_users", async (parent, args, context, info, { email, password, desiredRoleName }) => {
+          //   console.log("adminLogin called");
+          //   try {
+              
+          //     console.log("Context  in adminLogin:", context);
+          //     // console.log("Received password:", password);
+          //     const user = await User.findOne({ email }).populate("role");
+      
+          //     // console.log("user:", user);
+          //     if (!user) {
+          //       throw new AuthenticationError("No profile with this email found!");
+          //     }
+          //     //Checking if the authenticated user has the necessary permission to create an admin account
+          //   if (
+          //     (
+          //       !context.user) ||
+          //     context.user.role.name !== "Admin"
+          //   ) {
+          //     throw new Error(
+          //       "You don't have the necessary permissions to create this user."
+          //     );
+          //   }
+          //     const correctPw = await user.isCorrectPassword(password.trim());
+          //     // console.log("correct password:", correctPw);
+          //     if (!correctPw) {
+          //       throw new AuthenticationError("Incorrect password!");
+          //     }
+      
+          //     const token = signToken(user);
+          //     console.log("logged in!");
+          //     return { token, user };
+          //   } catch (e) {
+          //     console.error("login :", e);
+          //     throw e;
+          //   }
+          // } ),
           removeUser: async (parent, { _id }) => {
             try {
               const removedUser = await User.findOneAndDelete(_id);

@@ -1,6 +1,6 @@
 import decode from "jwt-decode";
 
-class AuthService {
+class Auth {
   getProfile() {
     return decode(this.getToken());
   }
@@ -23,9 +23,22 @@ class AuthService {
     return localStorage.getItem("id_token");
   }
 
-  login(idToken) {
+  isAdmin() {
+    if (!this.loggedIn()) {
+      return false;
+    }
+    const profile = this.getProfile();
+    //console.log("Profile:", profile.data.role.name);
+    // Check if the 'role' exists and if 'name' is 'Admin'
+    return profile.data.role && profile.data.role.name === "Admin";
+  }
+
+  login(idToken, callback) {
+    // console.log("login called");
     localStorage.setItem("id_token", idToken);
-    window.location.assign("/dashboard");
+
+    if (callback) callback();
+    //window.location.assign("/");
   }
 
   logout() {
@@ -35,4 +48,4 @@ class AuthService {
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default new AuthService();
+export default new Auth();

@@ -1,69 +1,69 @@
 [
-    {
-      "username": "heidi",
-      "email": "heidi@yahoo.com",
-      "password": "password3",
-      "role": {
-        "name": "Admin",
-        "scope": [
-          {
-            "title":  "manage_users" 
-          },
-          {
-            "title": "add_product"
-          },
-          {
-            "title": "delete_product"
-          },
-          {
-            "title": "update_product"
-          },
-          {
-            "title": "add_category"
-          },
-          {
-            "title": "delete_category"
-          },
-          {
-            "title": "update_category"
-          },
-          {
-            "title": "add_order"
-          },  
-          {
-            "title": "view_orders"
-          },
-          {
-            "title": "delete_order"
-          },
-          {
-            "title": "update_order"
-          },  
-           { "title": "manage_orders" }
-        ]
-      }
-    },
-    {
-      "username": "user2",
-      "email": "user2@example.com",
-      "password": "password2",
-      "role": {
-        "name": "Customer",
-        "scope": [
-          {
-            "title": "add_order"
-          },  
-          {
-            "title": "view_orders"
-          },
-          {
-            "title": "delete_order"
-          },
-          {
-            "title": "update_order"
-          }
-        ]
-      }
+  {
+    "username": "heidi",
+    "email": "heidi@yahoo.com",
+    "password": "password3",
+    "role": {
+      "name": "Admin",
+      "scope": [
+        {
+          "title": "manage_users"
+        },
+        {
+          "title": "add_product"
+        },
+        {
+          "title": "delete_product"
+        },
+        {
+          "title": "update_product"
+        },
+        {
+          "title": "add_category"
+        },
+        {
+          "title": "delete_category"
+        },
+        {
+          "title": "update_category"
+        },
+        {
+          "title": "add_order"
+        },
+        {
+          "title": "view_orders"
+        },
+        {
+          "title": "delete_order"
+        },
+        {
+          "title": "update_order"
+        },
+        { "title": "manage_orders" },
+        { "title": "manage_rentals" }
+      ]
     }
-  ]
-  
+  },
+  {
+    "username": "user2",
+    "email": "user2@example.com",
+    "password": "password2",
+    "role": {
+      "name": "Customer",
+      "scope": [
+        {
+          "title": "add_order"
+        },
+        {
+          "title": "view_orders"
+        },
+        {
+          "title": "delete_order"
+        },
+        {
+          "title": "update_order"
+        }
+      ]
+    }
+  }
+]

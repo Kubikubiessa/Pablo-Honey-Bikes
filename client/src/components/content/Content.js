@@ -30,6 +30,17 @@ export default function Content() {
           <p className="home-categories-windowText">Gravel Bike Wheels</p>
         </Link>
       </div>
+      <div className="home-categories-windowWrapRental">
+        <Link
+          to="/rentalbikes"
+          className="home-categories-window home-categories-window4"
+        >
+          <div className="home-categories-innerWindow"></div>
+          <p className="home-categories-windowText">Rental Bikes</p>
+        </Link>
+        
+        
+      </div>
     </div>
   );
 }

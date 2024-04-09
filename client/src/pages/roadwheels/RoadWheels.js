@@ -1,5 +1,5 @@
 import{ React, useState } from "react";
-import Cart from "../../components/cart/Cart";
+//import Cart from "../../components/cart/Cart";
 
 //import "./About.css";
 //import About from "../about/About";
@@ -12,7 +12,7 @@ const RoadWheels = () => {
 
   return (
     <>
-      <Cart/>
+   <p>nice road wheels</p>
     </>
   );
 };

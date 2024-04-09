@@ -1,32 +1,30 @@
-import { React, useContext, useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom"; 
 import "./Navbar.css";
-import { changeClassName } from "../../helper/changeClassName";
-
-//import About from "../../about/About";
-
 import Auth from "../../utils/auth";
+import DropdownMenu from "../dropdown/DropdownMenu";
 
 const Navbar = () => {
   const [classIcon, setIcon] = useState(false);
   const [closeNav, setCloseNav] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const { setPopUp } = useContext(changeClassName);
-
-  function popUpButton() {
-    setPopUp((popUp) => !popUp);
-  }
+   
 
   function handleClick() {
     setIcon((classIcon) => !classIcon);
     setCloseNav((closeNav) => !closeNav);
   }
+ 
 
-  function toggleDropdown() {
-    setShowDropdown(!showDropdown);
-  }
-
-  let toogleIcon = classIcon ? "fa-times" : "fa-bars";
-  let toogleNav = closeNav ? "nav-menu active" : "nav-menu";
+  let toggleIcon = classIcon ? "fa-times" : "fa-bars";
+  let toggleNav = closeNav ? "nav-menu active" : "nav-menu";
+  
+  const shopDropdownItems = [
+    { label: "Mountain Bike Wheels", path: "/mtbwheels" },
+    { label: "Road Bike Wheels", path: "/roadwheels" },
+    { label: "Gravel bike Wheels", path: "/gravelwheels" },
+    { label: "Rental Bikes", path: "/rentalbikes"}
+    // Add more items as needed
+  ];
 
   return (
     <nav className="navbar">
@@ -40,13 +38,29 @@ const Navbar = () => {
       </div>
 
       <div className="menu-icons">
-        <i className={`fas ${toogleIcon}`} onClickCapture={handleClick}></i>
+        <i className={`fas ${toggleIcon}`} onClickCapture={handleClick}></i>
       </div>
-
-      <ul className={toogleNav}>
-        {/* <ul className="nav-menu active"> */}
+      <div className="menu-and-login">
+      <ul className={toggleNav}>
         {Auth.loggedIn() ? (
           <>
+            <li>
+              <Link to="/" className="nav-links">
+                HOME
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="nav-links">
+                ABOUT
+              </Link>
+            </li>
+           
+            <DropdownMenu label="SHOP" items={shopDropdownItems} />
+            <li>
+              <Link to="/checkout" className="nav-links">
+                CART
+              </Link>
+            </li>
             <li>
               <span
                 style={{ fontSize: "15px" }}
@@ -60,53 +74,27 @@ const Navbar = () => {
         ) : (
           <>
             <li>
-              <a href="/" className="nav-links">
-                {/* <i className="fa-solid fa-house-user"></i> */}
+              <Link to="/" className="nav-links">
                 HOME
-              </a>
+              </Link>
             </li>
-
             <li>
-              <a href="/About" className="nav-links">
-                {/* <i className=" fa-solid fa-users-gear"></i> */}
+              <Link to="/about" className="nav-links">
                 ABOUT
-              </a>
+              </Link>
             </li>
-            <li
-              className="dropdown-item"
-              onMouseEnter={toggleDropdown}
-              onMouseLeave={toggleDropdown}
-            >
-              <a href="/Shop" className="nav-links">
-                SHOP
-              </a>
-              {showDropdown && (
-                <div className="dropdown-menu">
-                  <a href="/mtbwheels" className="dropdown-item xyz" >
-                    Mountain Bike Wheels
-                  </a>
-                  <a href="/roadwheels" className="dropdown-item">
-                    Road Bike Wheels
-                  </a>
-                  <a href="/gravelwheels" className="dropdown-item">
-                    Gravel bike Wheels
-                  </a>
-                  {/* Add more dropdown options as needed */}
-                </div>
-              )}
-            </li>
+            <DropdownMenu label="SHOP" items={shopDropdownItems} />
             <li>
-              <span
-                className="nav-links btnLogin "
-                onClickCapture={popUpButton}
-              >
+              <Link to="/customerlogin" className="nav-links btnLogin">
                 Login
-              </span>
+              </Link>
             </li>
           </>
         )}
       </ul>
+      </div>
     </nav>
   );
 };
+
 export default Navbar;

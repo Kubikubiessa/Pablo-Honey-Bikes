@@ -1,0 +1,74 @@
+.admindash-container {
+    width: 100%;
+    background-color: #121212; /* Dark background for the dashboard */
+    color: #ffffff; /* White text color */
+    padding: 40px;
+  }
+  
+  .admindash-header {
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .admindash-header h1 {
+    font-size: 2.5rem; /* Large text for the main title */
+    margin-bottom: 10px;
+  }
+  
+  .admindash-header h2 {
+    font-size: 1.5rem; /* Smaller text for the subheading */
+    font-weight: 400; /* Lighter font weight for the subheading */
+    margin-bottom: 30px;
+  }
+  .admindash-menu-icons {
+    display: flex;
+    justify-content: center; /* Centers the icon horizontally */
+    margin-top: 30px; /* Adds some space above the icon */
+  }
+  
+  .admindash-menu-icon {
+    font-size: 2rem; /* Sets a large size for the icon for easy interaction */
+    color: #ffffff; /* White color for the icon */
+    cursor: pointer; /* Changes the cursor to pointer to indicate it's clickable */
+    transition: transform 0.2s ease-in-out; /* Smooth transformation on click */
+  }
+  
+  .admindash-menu-icon:hover {
+    transform: scale(1.1); /* Slightly enlarges the icon on hover */
+  }
+  
+  .admindash-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Space between links */
+  }
+  
+  .admindash-link {
+    background-color: #333333; /* Slightly lighter dark background for contrast */
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px; /* Rounded corners for the buttons */
+    text-decoration: none; /* Remove underline from links */
+    font-weight: 600; /* Bold font for link text */
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .admindash-link:hover {
+    background-color: #555555; /* Lighten the background on hover for feedback */
+  }
+  
+  @media (max-width: 600px) {
+    .admindash-links {
+      flex-direction: column; /* Stack links vertically on smaller screens */
+    }
+  
+    .admindash-header h1 {
+      font-size: 2rem; /* Slightly smaller font size for smaller screens */
+    }
+  
+    .admindash-header h2 {
+      font-size: 1.2rem;
+    }
+  }
+  

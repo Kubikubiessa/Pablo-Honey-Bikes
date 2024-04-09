@@ -1,5 +1,5 @@
 import { makeVar, InMemoryCache } from "@apollo/client";
-import { GET_ORDER } from "./queries.js";
+import { GET_CUSTOMER_ORDER} from "./queries.js";
 export const orderItemsVar = makeVar([]);
 
 
@@ -25,7 +25,7 @@ export const CustomInMemoryCache = new InMemoryCache({
               updateOrder(_, { args, cache }) {
                 // Handle cache updates after the updateOrder mutation
                 const { id, status } = args;
-                const data = cache.readQuery({ query: GET_ORDER });
+                const data = cache.readQuery({ query: GET_CUSTOMER_ORDER });
       
                 if (data && data.orderItems) {
                   const updatedItems = data.orderItems.map((item) => {
@@ -39,7 +39,7 @@ export const CustomInMemoryCache = new InMemoryCache({
                   });
       
                   cache.writeQuery({
-                    query: GET_ORDER,
+                    query: GET_CUSTOMER_ORDER,
                     data: { orderItems: updatedItems }
                   });
                 }
@@ -49,13 +49,13 @@ export const CustomInMemoryCache = new InMemoryCache({
               deleteOrder(_, { args, cache }) {
                 // Handle cache updates after the deleteOrder mutation
                 const { id } = args;
-                const data = cache.readQuery({ query: GET_ORDER });
+                const data = cache.readQuery({ query: GET_CUSTOMER_ORDER });
       
                 if (data && data.orderItems) {
                   const updatedItems = data.orderItems.filter((item) => item.id !== id);
       
                   cache.writeQuery({
-                    query: GET_ORDER,
+                    query: GET_CUSTOMER_ORDER,
                     data: { orderItems: updatedItems }
                   });
                 }

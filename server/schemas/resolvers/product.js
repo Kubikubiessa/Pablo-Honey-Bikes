@@ -1,5 +1,7 @@
-const Product = require("../models/Product");
-const Category = require("../models/Category");const { requireAuth } = require("../utils/auth");
+const Product = require("../../models/Product");
+const Category = require("../../models/Category");
+const { requireAuth } = require("../../utils/auth");
+const { AuthenticationError } = require("apollo-server-express");
 
 const productResolvers = {
     Query: {

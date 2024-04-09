@@ -1,156 +1,288 @@
 import { gql } from "@apollo/client";
+ 
 
-export const LOGIN_USER = gql`
-  mutation loginUser($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-      user {
-        _id
-        username
-      }
-    }
-  }
-`;
-export const ADD_PROFILE = gql`
-  mutation addProfile($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username, email: $email, password: $password) {
+export const ADD_USER = gql`
+  mutation AddUser(
+    $username: String!
+    $email: String!
+    $password: String!
+    $desiredRole: String
+  ) {
+    addUser(
+      username: $username
+      email: $email
+      password: $password
+      desiredRole: $desiredRole
+    ) {
       token
       user {
         _id
         username
         email
+        role {
+          name
+        
+        }
+        orders {
+          _id
+         
+        }
+        
       }
     }
   }
 `;
 
-// createProduct mutation
-export const CREATE_PRODUCT = gql`
-  mutation CreateProduct(
-    $name: String!
-    $description: String!
-    $price: Float!
-    $categoryId: ID!
-  ) {
-    createProduct(
-      name: $name
-      description: $description
-      price: $price
-      categoryId: $categoryId
-    ) {
-      id
-      productname
-      description
-      price
-      category {
-        id
-        categoryname
+export const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+        role {
+          name
+          # Include other role fields if needed
+        }
+        orders {
+          _id
+          # Include other order fields if needed
+        }
+        # Include other user fields if needed
       }
     }
   }
 `;
 
-// updateProduct mutation
-export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct(
-    $id: ID!
-    $name: String
-    $description: String
-    $price: Float
-    $categoryId: ID
-  ) {
-    updateProduct(
-      id: $id
-      name: $name
-      description: $description
-      price: $price
-      categoryId: $categoryId
-    ) {
-      id
-      productname
-      description
-      price
-      category {
-        id
-        categoryname
+export const ADMIN_LOGIN = gql`
+  mutation AdminLogin($email: String!, $password: String!) {
+    adminLogin(email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+        role {
+          name
+          # Include other role fields if needed
+        }
+        orders {
+          _id
+          # Include other order fields if needed
+        }
+        # Include other user fields if needed
       }
     }
   }
 `;
 
-// deleteProduct mutation
-export const DELETE_PRODUCT = gql`
-  mutation DeleteProduct($id: ID!) {
-    deleteProduct(id: $id)
+export const REMOVE_USER = gql`
+  mutation RemoveUser($_id: ID!) {
+    removeUser(_id: $_id) {
+      _id
+      username
+      email
+      role {
+        name
+        # Include other role fields if needed
+      }
+      orders {
+        _id
+        # Include other order fields if needed
+      }
+      # Include other user fields if needed
+    }
   }
 `;
 
-// createCategory mutation
-export const CREATE_CATEGORY = gql`
-  mutation CreateCategory($name: String!) {
-    createCategory(name: $name) {
-      id
+ 
+export const ADD_CATEGORY = gql`
+  mutation AddCategory($categoryname: String!) {
+    addCategory(categoryname: $categoryname) {
+      _id
       categoryname
+      # Include other category fields if needed
     }
   }
 `;
 
-// updateCategory mutation
 export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($id: ID!, $name: String!) {
-    updateCategory(id: $id, name: $name) {
-      id
+  mutation UpdateCategory($_id: ID!, $categoryname: String, $products: [ID!]) {
+    updateCategory(_id: $_id, categoryname: $categoryname, products: $products) {
+      _id
       categoryname
+      # Include other category fields if needed
     }
   }
 `;
 
-// deleteCategory mutation
 export const DELETE_CATEGORY = gql`
-  mutation DeleteCategory($id: ID!) {
-    deleteCategory(id: $id)
+  mutation DeleteCategory($_id: ID!) {
+    deleteCategory(_id: $_id) {
+      _id
+      # Include other fields if needed
+    }
   }
 `;
 
-// createOrder mutation
-export const CREATE_ORDER = gql`
-  mutation CreateOrder($items: [OrderItemInput!]!) {
-    createOrder(items: $items) {
-      id
+export const ADD_PRODUCT = gql`
+  mutation AddProduct($productname: String!, $properties: [PropertyInput!]!, $price: Float!, $categoryId: ID!) {
+    addProduct(productname: $productname, properties: $properties, price: $price, categoryId: $categoryId) {
+      _id
+      productname
+      price
+      properties {
+        key
+        value
+      }
+      category {
+        _id
+        categoryname
+      }
+      # Include other product fields if needed
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($_id: ID!, $productname: String!, $properties: [PropertyInput!]!, $price: Float!, $categoryId: ID) {
+    updateProduct(_id: $_id, productname: $productname, properties: $properties, price: $price, categoryId: $categoryId) {
+      _id
+      productname
+      price
+      properties {
+        key
+        value
+      }
+      category {
+        _id
+        categoryname
+      }
+      # Include other product fields if needed
+    }
+  }
+`;
+
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($_id: ID!) {
+    deleteProduct(_id: $_id) {
+      _id
+      # Include other fields if needed
+    }
+  }
+`;
+
+ 
+
+export const ADD_ORDER = gql`
+  mutation AddOrder($items: [OrderItemInput!]!, $status: String!, $userId: ID) {
+    addOrder(items: $items, status: $status, userId: $userId) {
+      _id
       items {
+        _id
         product {
-          id
+          _id
           productname
+          price
         }
         quantity
       }
       total
       status
+      user {
+        _id
+        username
+        email
+      }
+      # Include other order fields if needed
     }
   }
 `;
 
-// updateOrder mutation
 export const UPDATE_ORDER = gql`
-  mutation UpdateOrder($id: ID!, $status: OrderStatus!) {
-    updateOrder(id: $id, status: $status) {
-      id
+  mutation UpdateOrder($_id: ID!, $items: [OrderItemInput!]!, $status: String!) {
+    updateOrder(_id: $_id, items: $items, status: $status) {
+      _id
       items {
+        _id
         product {
-          id
+          _id
           productname
+          price
         }
         quantity
       }
       total
       status
+      user {
+        _id
+        username
+        email
+      }
+      # Include other order fields if needed
     }
   }
 `;
 
-// deleteOrder mutation
 export const DELETE_ORDER = gql`
-  mutation DeleteOrder($id: ID!) {
-    deleteOrder(id: $id)
+  mutation DeleteOrder($_id: ID!) {
+    deleteOrder(_id: $_id) {
+      _id
+      # Include other fields if needed
+    }
   }
 `;
+
+// Add other mutations as needed
+
+export const ADD_RENTAL = gql`
+  mutation AddRental($rentalname: String!, $properties: [PropertyInput!]!, $price: Float!, $categoryId: ID!) {
+    addRental(rentalname: $rentalname, properties: $properties, price: $price, categoryId: $categoryId) {
+      _id
+      rentalname
+      price
+      properties {
+        key
+        value
+      }
+      category {
+        _id
+        categoryname
+      }
+      # Include other product fields if needed
+    }
+  }
+`;
+export const UPDATE_RENTAL = gql`
+  mutation UpdateRental($_id: ID!, $rentalname: String!, $properties: [PropertyInput!]!, $price: Float!, $categoryId: ID) {
+    updateRental(_id: $_id, rentalname: $rentalname, properties: $properties, price: $price, categoryId: $categoryId) {
+      _id
+      rentalname
+      price
+      properties {
+        key
+        value
+      }
+      category {
+        _id
+        categoryname
+      }
+      # Include other product fields if needed
+    }
+  }
+`;
+
+export const DELETE_RENTAL = gql`
+  mutation DeleteRental($_id: ID!) {
+    deleteRental(_id: $_id) {
+      _id
+      # Include other fields if needed
+    }
+  }
+`;
+//old queries
+ 
+
+ 
+ 

@@ -10,21 +10,46 @@ const cors = require("cors");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
-const server = new ApolloServer({
+const server =  new ApolloServer({
   typeDefs,
   resolvers,
-  context: authMiddleware,
-});
-
+  context: ({ req }) => {
+    console.log("Apollo Server context called");
+    const contextUser = authMiddleware({ req }).user;
+    console.log("Context User:", contextUser); // This should log the user object extracted from the token
+    return { user: contextUser };
+  //   // Use authMiddleware or similar function to extract user info from request
+  //   // const user = authMiddleware(req);
+  //   // console.log("server user", user);
+  //   // // Return an object that will be passed as the context to all resolvers
+  //   // return { user };
+  
+  
+  // // { authMiddleware }
+  
+  
+  // // ({ req }) => {
+  //   // Calling authMiddleware to decode JWT and attach user to context
+  //   console.log("Apollo Server context called");
+  //   //console.log("Request headers:", req.headers);
+  // //console.log("Request body:", req.body);
+  //   return { user: authMiddleware({req}).user
+  //  };
+  },
+ });
+ 
+// server.applyMiddleware({ app });
 const corsOptions = {
   origin: "*",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
+app.use(cors(corsOptions)); // Use this after the variable declaration
 // if (process.env.NODE_ENV === "production") {
 app.use(express.static(path.join(__dirname, "../client/build"))); //potentially comment out if statement
 // }
-app.use(cors(corsOptions)); // Use this after the variable declaration
+
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

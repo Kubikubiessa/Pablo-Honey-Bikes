@@ -1,174 +1,250 @@
 const { gql } = require("@apollo/client");
- 
- 
 
 export const GET_ME = gql`
-  query {
+  query GetMe {
     me {
       _id
       username
       email
-      password
+      role {
+        name
+        # Include other role fields if needed
+      }
       orders {
-        id
-        items {
-          productId
-          quantity
-        }
-        total
-        status
+        _id
+        # Include other order fields if needed
       }
-    }
-  }
-`;
-
-export const GET_PRODUCT = gql`
-  query getProduct($id: ID!) {
-    product(id: $id) {
-      id
-      productname
-      description
-      price
-      category {
-        id
-        categoryname
-      }
-    }
-  }
-`;
-
-export const GET_PRODUCTS = gql`
-  query getProducts($category: ID) {
-    products(category: $category) {
-      id
-      productname
-      description
-      price
-      category {
-        id
-        categoryname
-      }
-    }
-  }
-`;
-
-export const GET_CATEGORY = gql`
-  query getCategory($id: ID!) {
-    category(id: $id) {
-      id
-      categoryname
-      products {
-        id
-        productname
-        description
-        price
-      }
-    }
-  }
-`;
-
-export const GET_CATEGORIES = gql`
-  query {
-    categories {
-      id
-      categoryname
-      products {
-        id
-        productname
-        description
-        price
-      }
-    }
-  }
-`;
-
-export const GET_ORDER = gql`
-query GetOrderItems {
-  orderItems @client 
-}
-
- 
-`;
- // query getOrder($id: ID!) {
-  //   order(id: $id) {
-  //     id
-  //     items {
-  //       productId
-  //       quantity
-  //     }
-  //     total
-  //     status
-  //   }
-  // }
-export const GET_ORDERS = gql`
-  query {
-    orders {
-      id
-      items {
-        productId
-        quantity
-      }
-      total
-      status
-    }
-  }
-`;
-
-export const GET_USER = gql`
-  query getUser($id: ID!) {
-    user(id: $id) {
-      _id
-      username
-      email
-      orders {
-        id
-        items {
-          productId
-          quantity
-        }
-        total
-        status
-      }
-    }
-  }
-`;
-
-export const GET_ADMIN = gql`
-  query getAdmin($id: ID!) {
-    admin(id: $id) {
-      _id
-      adminname
-      email
-      password
+      # Include other user fields if needed
     }
   }
 `;
 
 export const GET_USERS = gql`
-  query {
+  query GetUsers {
     users {
       _id
       username
       email
-      orders {
-        id
-        items {
-          productId
-          quantity
-        }
-        total
-        status
+      role {
+        name
+        # Include other role fields if needed
       }
+      orders {
+        _id
+        # Include other order fields if needed
+      }
+      # Include other user fields if needed
     }
   }
 `;
 
-export const GET_ADMINS = gql`
-  query {
-    admins {
+export const GET_USER = gql`
+  query GetUser($_id: ID!) {
+    user(_id: $_id) {
       _id
-      adminname
+      username
       email
+      role {
+        name
+        # Include other role fields if needed
+      }
+      orders {
+        _id
+        # Include other order fields if needed
+      }
+      # Include other user fields if needed
     }
   }
 `;
+
+export const GET_CATEGORY = gql`
+  query GetCategory($_id: ID!) {
+    category(_id: $_id) {
+      _id
+      categoryname
+      # Include other category fields if needed
+    }
+  }
+`;
+
+export const GET_CATEGORIES = gql`
+  query GetCategories {
+    categories {
+      _id
+      categoryname
+      # Include other category fields if needed
+    }
+  }
+`;
+
+export const GET_PRODUCT = gql`
+  query GetProduct($_id: ID!) {
+    product(_id: $_id) {
+      _id
+      productname
+      price
+      properties {
+        key
+        value
+      }
+      category {
+        _id
+        categoryname
+      }
+      # Include other product fields if needed
+    }
+  }
+`;
+
+export const GET_PRODUCTS = gql`
+  query GetProducts($category: ID) {
+    products(category: $category) {
+      _id
+      productname
+      price
+      properties {
+        key
+        value
+      }
+      category {
+        _id
+        categoryname
+      }
+      # Include other product fields if needed
+    }
+  }
+`;
+
+// Add other queries as needed
+export const GET_CUSTOMER_ORDER = gql`
+  query GetCustomerOrder($_id: ID!) {
+    customerOrderResolver(_id: $_id) {
+      _id
+      items {
+        _id
+        product {
+          _id
+          productname
+          price
+        }
+        quantity
+      }
+      total
+      status
+      user {
+        _id
+        username
+        email
+      }
+      # Include other order fields if needed
+    }
+  }
+`;
+
+export const GET_CUSTOMER_ORDERS = gql`
+  query GetCustomerOrders {
+    customerOrdersResolver {
+      _id
+      items {
+        _id
+        product {
+          _id
+          productname
+          price
+        }
+        quantity
+      }
+      total
+      status
+      user {
+        _id
+        username
+        email
+      }
+      # Include other order fields if needed
+    }
+  }
+`;
+
+export const GET_ADMIN_ORDER = gql`
+  query GetAdminOrder($_id: ID!) {
+    adminOrderResolver(_id: $_id) {
+      _id
+      items {
+        _id
+        product {
+          _id
+          productname
+          price
+        }
+        quantity
+      }
+      total
+      status
+      user {
+        _id
+        username
+        email
+      }
+      # Include other order fields if needed
+    }
+  }
+`;
+
+export const GET_ADMIN_ORDERS = gql`
+  query GetAdminOrders {
+    adminOrdersResolver {
+      _id
+      items {
+        _id
+        product {
+          _id
+          productname
+          price
+        }
+        quantity
+      }
+      total
+      status
+      user {
+        _id
+        username
+        email
+      }
+      # Include other order fields if needed
+    }
+  }
+`;
+
+// Add other queries as needed
+export const GET_RENTAL = gql`
+  query GetRental($_id: ID!) {
+    rental(_id: $_id) {
+      _id
+      rentalname
+      properties {
+        key
+        value
+      }
+      price
+      # Include other rental fields if needed
+    }
+  }
+`;
+
+export const GET_RENTALS = gql`
+  query GetRentals {
+    rentals {
+      _id
+      rentalname
+      properties {
+        key
+        value
+      }
+      price
+      # Include other rental fields if needed
+    }
+  }
+`;
+
+//old queries

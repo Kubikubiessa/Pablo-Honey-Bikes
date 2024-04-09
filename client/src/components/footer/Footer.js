@@ -1,8 +1,28 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"; 
 import "./Footer.css";
+import Auth from "../../utils/auth";
 //import About from "../about/About";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleAdminClick = (e) => {
+ 
+
+    e.preventDefault();
+    //   check if the user is an admin
+    if (Auth.loggedIn() && Auth.isAdmin()) {
+      
+      navigate('/admindash'); // Redirect to admin dashboard if user is an admin
+    } else {
+      navigate('/adminlogin'); // Otherwise, go to the admin login page
+    }
+  };
+//   console.log("Logged In:", Auth.loggedIn());
+// console.log("Is Admin:", Auth.isAdmin());
+
   return (
     <>
       <footer className="footer">
@@ -27,16 +47,16 @@ const Footer = () => {
             </a>
           </li> */}
           <li>
-            <a href="/Contact">Contact</a>
+            <Link to="/Contact">Contact</Link>
           </li>
           <li>
-            <a href="/Contact">Services</a>
+            <Link to="/Contact">Services</Link>
           </li>
           <li>
-            <a href="/Contact">Terms</a>
+            <Link to="/Contact">Terms</Link>
           </li>
           <li>
-            <a href="/Adminstration">Administration</a>
+            <Link to="/adminlogin"onClick={handleAdminClick} >Administration</Link>
           </li>
         </ul>
         <p className="copyright">Pablo Honey Bikes @ 2023</p>

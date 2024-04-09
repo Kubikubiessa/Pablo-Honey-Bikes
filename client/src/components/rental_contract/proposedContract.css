@@ -1,0 +1,26 @@
+#button-container { 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+button {
+    font-size: 30px;
+    margin: 30px 100px
+}
+
+#checkbox {
+    font-size: 20px; 
+    display: flex;
+    justify-content: center;  
+}
+
+#signature {
+    font-size: 20px; 
+    display: flex;
+    justify-content: center; 
+}
+
+h2 {
+   text-align: center; 
+}
