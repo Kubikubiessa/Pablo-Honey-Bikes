@@ -1,6 +1,6 @@
 .admindash-container {
     width: 100%;
-    background-color: #121212; /* Dark background for the dashboard */
+    background-color: #040000; /* Dark background for the dashboard */
     color: #ffffff; /* White text color */
     padding: 40px;
   }
@@ -45,10 +45,10 @@
   }
   
   .admindash-link {
-    background-color: #333333; /* Slightly lighter dark background for contrast */
+    background-color: #434141; /* Slightly lighter dark background for contrast */
     color: #ffffff;
     padding: 10px 20px;
-    border-radius: 5px; /* Rounded corners for the buttons */
+    /* border-radius: 5px; Rounded corners for the buttons */
     text-decoration: none; /* Remove underline from links */
     font-weight: 600; /* Bold font for link text */
     transition: background-color 0.3s ease-in-out;
