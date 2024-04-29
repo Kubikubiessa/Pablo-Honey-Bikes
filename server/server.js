@@ -18,23 +18,7 @@ const server =  new ApolloServer({
     const contextUser = authMiddleware({ req }).user;
     console.log("Context User:", contextUser); // This should log the user object extracted from the token
     return { user: contextUser };
-  //   // Use authMiddleware or similar function to extract user info from request
-  //   // const user = authMiddleware(req);
-  //   // console.log("server user", user);
-  //   // // Return an object that will be passed as the context to all resolvers
-  //   // return { user };
-  
-  
-  // // { authMiddleware }
-  
-  
-  // // ({ req }) => {
-  //   // Calling authMiddleware to decode JWT and attach user to context
-  //   console.log("Apollo Server context called");
-  //   //console.log("Request headers:", req.headers);
-  // //console.log("Request body:", req.body);
-  //   return { user: authMiddleware({req}).user
-  //  };
+ 
   },
  });
  
@@ -79,6 +63,7 @@ const startApolloServer = async (typeDefs, resolvers) => {
     });
   });
 };
+
 
 // Call the async function to start the server
 startApolloServer(typeDefs, resolvers);

@@ -56,22 +56,22 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
-    this.password = await bcrypt.hash(this.password, saltRounds);
+    this.password = await bcrypt.hashSync(this.password, saltRounds);
    
   }
 
   next();
  
 });
-
+       
  
  
 userSchema.methods.isCorrectPassword = async function (password) {
-  // console.log('comparing passwords:', password, this.password);
-  const result = await bcrypt.compare(password.trim(), this.password);
+   console.log('comparing passwords:', password, this.password);
+  const result = await bcrypt.compareSync(password, this.password);
  
-  // console.log('comparing bcrypt.compared passwords:', password, this.password)
-  // console.log('password comparison result:', result);
+   console.log('comparing bcrypt.compared passwords:', password, this.password)
+   console.log('password comparison result:', result);
   return result;
 };
 

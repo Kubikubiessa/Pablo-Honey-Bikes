@@ -12,7 +12,7 @@ const  Register = ({onToggle, onFormSubmit, error}) => {
           ...FormState,
           [name]: value,
         });
-        console.log("register form state", FormState);
+        //console.log("register form state", FormState);
       };
       const handleSubmit = async (event) => {
         event.preventDefault();
