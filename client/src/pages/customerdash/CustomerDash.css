@@ -1,0 +1,74 @@
+.customerdash-container {
+    width: 100%;
+    background-color: #040000; /* Dark background for the dashboard */
+    color: #ffffff; /* White text color */
+    padding: 40px;
+  }
+  
+  .customerdash-header {
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .customerdash-header h1 {
+    font-size: 2.5rem; /* Large text for the main title */
+    margin-bottom: 10px;
+  }
+  
+  .customerdash-header h2 {
+    font-size: 1.5rem; /* Smaller text for the subheading */
+    font-weight: 400; /* Lighter font weight for the subheading */
+    margin-bottom: 30px;
+  }
+  .customerdash-menu-icons {
+    display: flex;
+    justify-content: center; /* Centers the icon horizontally */
+    margin-top: 30px; /* Adds some space above the icon */
+  }
+  
+  .customerdash-menu-icon {
+    font-size: 2rem; /* Sets a large size for the icon for easy interaction */
+    color: #ffffff; /* White color for the icon */
+    cursor: pointer; /* Changes the cursor to pointer to indicate it's clickable */
+    transition: transform 0.2s ease-in-out; /* Smooth transformation on click */
+  }
+  
+  .customerdash-menu-icon:hover {
+    transform: scale(1.1); /* Slightly enlarges the icon on hover */
+  }
+  
+  .customerdash-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Space between links */
+  }
+  
+  .customerdash-link {
+    background-color: #434141; /* Slightly lighter dark background for contrast */
+    color: #ffffff;
+    padding: 10px 20px;
+    /* border-radius: 5px; Rounded corners for the buttons */
+    text-decoration: none; /* Remove underline from links */
+    font-weight: 600; /* Bold font for link text */
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .customerdash-link:hover {
+    background-color: #555555; /* Lighten the background on hover for feedback */
+  }
+  
+  @media (max-width: 600px) {
+    .customerdash-links {
+      flex-direction: column; /* Stack links vertically on smaller screens */
+    }
+  
+    .customerdash-header h1 {
+      font-size: 2rem; /* Slightly smaller font size for smaller screens */
+    }
+  
+    .customerdash-header h2 {
+      font-size: 1.2rem;
+    }
+  }
+  

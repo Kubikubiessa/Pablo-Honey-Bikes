@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN, ADD_USER } from '../../utils/mutations';
 import Auth from '../../utils/auth';
@@ -9,7 +10,7 @@ import "../contact/Contact.css";
 import "animate.css";
 
 const CustomerLogin = () => {
- 
+  const navigate = useNavigate();
   const [login, { error: loginError }] = useMutation(LOGIN);
   const [addUser, { error: registerError }] = useMutation(ADD_USER);
   const [showLogin, setShowLogin] = useState(true);
@@ -21,7 +22,10 @@ const CustomerLogin = () => {
   const handleLoginSubmit = async (loginFormData) => {
     try {
       const { data } = await login({ variables: { ...loginFormData } });
-      Auth.login(data.login.token);
+      if (data.login.token) {
+      Auth.login(data.login.token, () => navigate("/customerdash"))} else {
+        console.error("Login succeeded but no token received.");
+      };
     } catch (e) {
       console.error(e);
     }

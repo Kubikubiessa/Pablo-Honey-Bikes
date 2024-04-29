@@ -11,6 +11,7 @@ import GravelWheels from "../pages/gravelwheels/GravelWheels";
 import RentalBikes from "../pages/rentalbikes/RentalBikes";
 import Checkout from "../pages/checkout/Checkout";
 import AdminDash from "../pages/admindash/AdminDash";
+import CustomerDash from "../pages/customerdash/CustomerDash";
 import { AnimatePresence } from "framer-motion";
  
  
@@ -33,6 +34,7 @@ const AnimatedRoutes = () => {
           <Route path="/rentalbikes" element={<RentalBikes />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/admindash" element={<AdminDash />} />
+          <Route path="/customerdash" element={<CustomerDash />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </AnimatePresence>
