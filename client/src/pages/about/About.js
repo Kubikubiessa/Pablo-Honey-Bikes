@@ -6,7 +6,7 @@ import React from "react";
 const About = () => {
   return (
     <>
-      
+        <p>My name is Pablo.</p> 
     </>
   );
 };

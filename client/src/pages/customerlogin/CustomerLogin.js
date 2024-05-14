@@ -30,20 +30,7 @@ const CustomerLogin = () => {
       console.error(e);
     }
   };
-  // const handleRegisterSubmit = async (registerFormData) => {
-  //   try {
-  //     console.log("register form data", registerFormData);
-  //     const { data } = await addUser({ variables: { ...registerFormData } });
-  //     console.log("register data", data);
-  //     Auth.login(data.addUser.token);
-  //     console.log("register data and token",data.addUser.token);
-  //   } catch (e) {
-  //     console.error("Register Error:", e.message);
-  //   }
-  //   if (registerError) {
-  //     console.error("Register Error:", registerError.message);
-  //   }
-  // };
+ 
   const handleRegisterSubmit = async (registerFormData) => {
     try {
        

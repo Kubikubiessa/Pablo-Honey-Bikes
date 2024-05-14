@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Auth from '../../utils/auth';
 import "../../pages/contact/Contact.css";
 import "animate.css";
 

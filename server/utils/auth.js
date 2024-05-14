@@ -4,12 +4,12 @@ const secret = "mysecretssshhhhhhh";
 const expiration = "4h";
 
 const checkAuthorization = (requiredScope) => {
-  // console.log("Checking authorization");
-  // console.log("Required scope:", requiredScope);
+  console.log("Checking authorization");
+ console.log("Required scope:", requiredScope);
  
   return (parent, args, context) => {
-    // console.log('context user:', context.user);
-    //  console.log('context user role:', context.user.role);
+     //console.log('context user log:', context);
+     // console.log('context user role:', context.user.role);
 
     if (context.user.role && context.user.role) {
       const userScopes = context.user.role.scope.map((scope) => scope.title);
@@ -25,6 +25,8 @@ const checkAuthorization = (requiredScope) => {
 };
  
 const requireAuth = (requiredScope, resolverFunction) => {
+   console.log("Requiring auth");
+  console.log("Required scope:", requiredScope);
   return async (parent, args, context, info) => {
     try {
       checkAuthorization(requiredScope)(parent, args, context);
@@ -38,12 +40,13 @@ const requireAuth = (requiredScope, resolverFunction) => {
 
 module.exports = {
   authMiddleware: function ({ req }) {
-    console.log("Auth middleware called");
-    console.log("Request headers:", JSON.stringify(req.headers));
+    // console.log("Auth middleware called");
+    // console.log("Request headers:", JSON.stringify(req.headers));
   
     let token = req.headers.authorization || '';
+    // console.log("req headers:", req.headers);
     token = token.replace(/^Bearer\s/, ''); // Remove Bearer prefix if present
-    console.log("Processed Token:", token);
+    // console.log("Processed Token:", token);
   
     if (!token) {
       console.error("No token provided");
@@ -52,7 +55,7 @@ module.exports = {
   
     try {
       const decoded = jwt.verify(token, secret, { expiresIn: expiration });
-      console.log("Decoded JWT:", decoded);
+      //console.log("Decoded JWT:", decoded);
       return { user: decoded.data };
     } catch (err) {
       console.error("Invalid token");

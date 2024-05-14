@@ -16,7 +16,7 @@ const server =  new ApolloServer({
   context: ({ req }) => {
     console.log("Apollo Server context called");
     const contextUser = authMiddleware({ req }).user;
-    console.log("Context User:", contextUser); // This should log the user object extracted from the token
+    //console.log("Context User:", contextUser); // This should log the user object extracted from the token
     return { user: contextUser };
  
   },
