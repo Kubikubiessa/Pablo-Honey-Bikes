@@ -82,6 +82,7 @@ export const GET_PRODUCT = gql`
     product(_id: $_id) {
       _id
       productname
+      description
       price
       properties {
         key
@@ -101,6 +102,7 @@ export const GET_PRODUCTS = gql`
     products(category: $category) {
       _id
       productname
+      description
       price
       properties {
         key

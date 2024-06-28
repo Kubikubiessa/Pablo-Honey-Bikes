@@ -1,5 +1,6 @@
 const Product = require("../../models/Product");
 const Category = require("../../models/Category");
+const Brand = require("../../models/Brand");
 const { requireAuth } = require("../../utils/auth");
 const { AuthenticationError } = require("apollo-server-express");
 
@@ -7,7 +8,12 @@ const productResolvers = {
   Query: {
     product: async (parent, { _id }, context, info) => {
       try {
-        const product = await Product.findById(_id).populate("category");
+        const product = await Product.findById(_id)
+          .populate("category")
+          .populate("brand");
+        if (!product) {
+          throw new Error("Product not found");
+        }
         return product;
       } catch (error) {
         console.error("product:", error);
@@ -16,9 +22,10 @@ const productResolvers = {
     },
     products: async (parent, { category }, context, info) => {
       try {
-        // const query = category ? { category: category } : {};
-        const products = await Product.find().populate("category");
-        console.log("Products", products);
+        const query = category ? { category } : {};
+        const products = await Product.find(query)
+          .populate("category")
+          .populate("brand");
         return products;
       } catch (error) {
         console.error("products:", error);
@@ -31,32 +38,39 @@ const productResolvers = {
       "add_product",
       async (
         parent,
-        { productname, price, properties, category },
+        { productname, description, price, properties, category, brand },
         context,
         info
       ) => {
-        console.log("addProduct called");
         try {
           const userData = context.user;
-          // console.log('userData:', context.user)
-          const userRole = userData.role;
-          // console.log("user data and role:", userData, userRole);
-          if (!userData || !userRole) {
+          if (!userData || !userData.role) {
             throw new AuthenticationError("Not authenticated");
           }
-          //console.log("Looking for category with ID:", category);
+
           const categoryDoc = await Category.findById(category);
-         // console.log("Found category:", categoryDoc);
           if (!categoryDoc) {
             throw new Error("Category not found");
           }
+
+          const brandDoc = await Brand.findById(brand);
+          if (!brandDoc) {
+            throw new Error("Brand not found");
+          }
+
           const product = await Product.create({
             productname,
+            description,
             properties,
             price,
             category: categoryDoc._id,
+            brand: brandDoc._id,
           });
-          return product;
+
+          return await product
+            .populate("category")
+            .populate("brand")
+            .execPopulate(); // Proper use of populate after creation
         } catch (error) {
           console.error("addProduct :", error);
           throw error;
@@ -67,41 +81,33 @@ const productResolvers = {
       "update_product",
       async (
         parent,
-        { _id, productname, price, properties, category },
+        { _id, productname, description, price, properties, category, brand },
         context,
         info
       ) => {
         try {
           const userData = context.user;
-          const userRole = userData.role;
-          console.log("user data and role:", userData, userRole);
-          if (!userData || !userRole) {
+          if (!userData || !userData.role) {
             throw new AuthenticationError("Not authenticated");
           }
 
-          // Create an object with the fields to update
           const updateFields = {
             productname,
-            properties: properties,
+            description,
+            properties,
             price,
             category,
+            brand,
           };
-          // categoryId handled separately, as it might be null
-
-          if (category._id !== undefined) {
-            updateFields.category = category;
-          } else if (category === null) {
-            // If categoryId is explicitly set to null in the mutation, clear it
-            updateFields.category = null;
-          }
 
           const updatedProduct = await Product.findByIdAndUpdate(
-            { _id },
+            _id,
             updateFields,
             { new: true }
-          ).populate("category");
+          )
+            .populate("category")
+            .populate("brand");
 
-          console.log("updated product", updatedProduct);
           return updatedProduct;
         } catch (error) {
           console.error("updated product :", error);
@@ -114,23 +120,29 @@ const productResolvers = {
       async (parent, { _id }, context, info) => {
         try {
           const userData = context.user;
-          const userRole = userData.role;
-        //  console.log("user data and role:", userData, userRole);
-          if (!userData || !userRole) {
+          if (!userData || !userData.role) {
             throw new AuthenticationError("Not authenticated");
           }
-          const deletedProduct = await Product.findOneAndDelete({ _id: _id });
+
+          const deletedProduct = await Product.findByIdAndDelete(_id);
           if (!deletedProduct) {
             throw new Error("Product not found");
           }
+
+          // Optionally update the category and brand if necessary
           if (deletedProduct.category) {
             await Category.findByIdAndUpdate(deletedProduct.category, {
               $pull: { products: _id },
             });
           }
 
-         // console.log("product deleted :", deletedProduct._id);
-          return updatedCategory;
+          if (deletedProduct.brand) {
+            await Brand.findByIdAndUpdate(deletedProduct.brand, {
+              $pull: { products: _id },
+            });
+          }
+
+          return deletedProduct;
         } catch (error) {
           console.error("deletedProduct:", error);
           throw error;
@@ -139,4 +151,5 @@ const productResolvers = {
     ),
   },
 };
+
 module.exports = productResolvers;

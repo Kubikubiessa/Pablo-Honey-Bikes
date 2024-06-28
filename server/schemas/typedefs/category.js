@@ -7,6 +7,7 @@ const typeDefs = gql`
     _id: ID!
     categoryname: String!
     products: [Product!]!
+    brands: [Brand!]
   }
 
     type Query {
@@ -16,11 +17,13 @@ const typeDefs = gql`
     type Mutation {
         addCategory(
             categoryname: String!
+            brands: [ID]
         ): Category!
         updateCategory(
             _id: ID!
             categoryname: String!
             products: [ID!]
+            brands: [ID]
         ): Category!
         deleteCategory(_id: ID!): Category
     }

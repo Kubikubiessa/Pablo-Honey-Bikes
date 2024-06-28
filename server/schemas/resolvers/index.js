@@ -15,8 +15,9 @@ const productResolvers = require('./product');
 const orderResolvers = require('./order');
 const rentalResolvers = require('./rental');
 const categoryResolvers = require('./category');
+const brandResolvers = require('./brand');
 
-// Combine all resolvers into a single object
+// Combining all resolvers into a single object
 const resolvers = {
   Query: {
     ...userResolvers.Query,
@@ -24,6 +25,7 @@ const resolvers = {
     ...orderResolvers.Query,
     ...rentalResolvers.Query,
     ...categoryResolvers.Query,
+    ...brandResolvers.Query,
   },
   Mutation: {
     ...userResolvers.Mutation,
@@ -31,6 +33,7 @@ const resolvers = {
     ...orderResolvers.Mutation,
     ...rentalResolvers.Mutation,
     ...categoryResolvers.Mutation,
+    ...brandResolvers.Mutation,
   }
 };
 

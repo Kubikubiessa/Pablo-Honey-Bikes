@@ -1,55 +1,57 @@
 // Product Type Definitions product.js
-
 const { gql } = require("apollo-server-express");
-
 const typeDefs = gql`
-  type Product {
+type Property {
+  key: String!
+  value: String!
+  type: String
+  options: [String]
+}
+
+type Product {
+  _id: ID!
+  productname: String!
+  description: String
+  price: Float!
+  properties: [Property!]!
+  category: Category!
+  brand: Brand!
+}
+
+type Query {
+  product(_id: ID!): Product
+  products(category: ID): [Product!]!
+}
+
+type Mutation {
+  addProduct(
+    productname: String!
+    description: String
+    price: Float!
+    properties: [PropertyInput!]!
+    category: ID!
+    brand: ID!
+  ): Product
+  updateProduct(
     _id: ID!
     productname: String
-    price: Float!
-    properties: [Property!]!
-    category: Category!
-  }
+    description: String
+    price: Float
+    properties: [PropertyInput!]
+    category: ID
+    brand: ID
+  ): Product
+  deleteProduct(_id: ID!): Product
+}
 
-  type Property {
-    key: String!
-    value: String!
-  }
+input PropertyInput {
+  key: String!
+  value: String!
+  type: String
+  options: [String]
+}
+`;
+module.exports = typeDefs;
 
-  type Category {
-    _id: ID!
-    categoryname: String!
-    products: [Product!]!
-  }
-
-  type Query {
-    product(_id: ID!): Product
-    products(category: ID): [Product!]!
-  }
-
-  type Mutation {
-    addProduct(
-      productname: String!
-      price: Float!
-      properties: [PropertyInput!]!
-      category: ID!
-    ): Product
-    updateProduct(
-      _id: ID!
-      productname: String!
-      price: Float!
-      properties: [PropertyInput!]!
-      category: ID
-    ): Product!
-   deleteProduct(_id: ID!): Product
-  }
-
-  input PropertyInput {
-    key: String!
-    value: String!
-  }
 
  
-`;
-
-module.exports = typeDefs;

@@ -127,10 +127,11 @@ export const DELETE_CATEGORY = gql`
 `;
 
 export const ADD_PRODUCT = gql`
-  mutation AddProduct($productname: String!, $properties: [PropertyInput!]!, $price: Float!, $categoryId: ID!) {
-    addProduct(productname: $productname, properties: $properties, price: $price, categoryId: $categoryId) {
+  mutation AddProduct($productname: String!, $description: String, $properties: [PropertyInput!]!, $price: Float!, $category: ID!) {
+    addProduct(productname: $productname, description: $description, properties: $properties, price: $price, category: $category) {
       _id
       productname
+      description
       price
       properties {
         key
@@ -146,10 +147,11 @@ export const ADD_PRODUCT = gql`
 `;
 
 export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct($_id: ID!, $productname: String!, $properties: [PropertyInput!]!, $price: Float!, $categoryId: ID) {
-    updateProduct(_id: $_id, productname: $productname, properties: $properties, price: $price, categoryId: $categoryId) {
+  mutation UpdateProduct($_id: ID!, $productname: String!, $description: String, $properties: [PropertyInput!]!, $price: Float!, $category: ID) {
+    updateProduct(_id: $_id, productname: $productname, description: $description, properties: $properties, price: $price, category: $category) {
       _id
       productname
+      description
       price
       properties {
         key
