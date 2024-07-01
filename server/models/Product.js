@@ -11,6 +11,7 @@ const productSchema = new Schema({
   productname: String,
   price: Number,
   properties: [propertySchema],
+  imageUrl: { type: String, default: '/images/default.jpg' },
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   brand: { type: Schema.Types.ObjectId, ref: "Brand" },
 });

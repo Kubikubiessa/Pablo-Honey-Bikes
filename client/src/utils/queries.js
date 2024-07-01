@@ -248,5 +248,43 @@ export const GET_RENTALS = gql`
     }
   }
 `;
+ 
+
+export const GET_BRANDS = gql`
+  query GetBrands {
+    brands {
+      _id
+      brandname
+      imageUrl
+      products {
+        _id
+        productname
+      }
+      categories {
+        _id
+        categoryname
+      }
+    }
+  }
+`;
+
+export const GET_BRAND = gql`
+  query GetBrand($_id: ID!) {
+    brand(_id: $_id) {
+      _id
+      brandname
+      imageUrl
+      products {
+        _id
+        productname
+      }
+      categories {
+        _id
+        categoryname
+      }
+    }
+  }
+`;
+
 
 //old queries

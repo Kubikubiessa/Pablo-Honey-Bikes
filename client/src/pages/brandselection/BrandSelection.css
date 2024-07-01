@@ -1,0 +1,26 @@
+/* BrandSelection.css */
+.brand-listing {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .brand-card {
+    width: 200px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .brand-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .brand-logo {
+    width: 100%;
+    height: auto;
+  }
+  

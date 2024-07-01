@@ -283,6 +283,52 @@ export const DELETE_RENTAL = gql`
     }
   }
 `;
+
+
+export const ADD_BRAND = gql`
+  mutation AddBrand($brandname: String!, $imageUrl: String, $products: [ID], $categories: [ID]) {
+    addBrand(brandname: $brandname, imageUrl: $imageUrl, products: $products, categories: $categories) {
+      _id
+      brandname
+      imageUrl
+      products {
+        _id
+        productname
+      }
+      categories {
+        _id
+        categoryname
+      }
+    }
+  }
+`;
+
+export const UPDATE_BRAND = gql`
+  mutation UpdateBrand($_id: ID!, $brandname: String!, $imageUrl: String, $products: [ID], $categories: [ID]) {
+    updateBrand(_id: $_id, brandname: $brandname, imageUrl: $imageUrl, products: $products, categories: $categories) {
+      _id
+      brandname
+      imageUrl
+      products {
+        _id
+        productname
+      }
+      categories {
+        _id
+        categoryname
+      }
+    }
+  }
+`;
+
+export const DELETE_BRAND = gql`
+  mutation DeleteBrand($_id: ID!) {
+    deleteBrand(_id: $_id) {
+      _id
+    }
+  }
+`;
+
 //old queries
  
 

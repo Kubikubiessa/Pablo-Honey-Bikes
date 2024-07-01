@@ -38,7 +38,7 @@ const productResolvers = {
       "add_product",
       async (
         parent,
-        { productname, description, price, properties, category, brand },
+        { productname, description, price, properties, imageUrl, category, brand },
         context,
         info
       ) => {
@@ -63,6 +63,7 @@ const productResolvers = {
             description,
             properties,
             price,
+            imageUrl,
             category: categoryDoc._id,
             brand: brandDoc._id,
           });
@@ -81,7 +82,7 @@ const productResolvers = {
       "update_product",
       async (
         parent,
-        { _id, productname, description, price, properties, category, brand },
+        { _id, productname, description, price, properties, imageUrl, category, brand },
         context,
         info
       ) => {
@@ -96,6 +97,7 @@ const productResolvers = {
             description,
             properties,
             price,
+            imageUrl,
             category,
             brand,
           };

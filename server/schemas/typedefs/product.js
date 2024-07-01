@@ -13,6 +13,7 @@ type Product {
   productname: String!
   description: String
   price: Float!
+  imageUrl: String
   properties: [Property!]!
   category: Category!
   brand: Brand!
@@ -28,6 +29,7 @@ type Mutation {
     productname: String!
     description: String
     price: Float!
+    imageUrl: String
     properties: [PropertyInput!]!
     category: ID!
     brand: ID!
@@ -37,6 +39,7 @@ type Mutation {
     productname: String
     description: String
     price: Float
+    imageUrl: String
     properties: [PropertyInput!]
     category: ID
     brand: ID

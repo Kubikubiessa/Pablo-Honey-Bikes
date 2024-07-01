@@ -7,6 +7,7 @@ const typeDefs = gql`
     _id: ID!
     brandname: String!
     products: [Product!]!
+    imageUrl: String
     categories: [Category!]!
   }
 
@@ -18,12 +19,15 @@ const typeDefs = gql`
   type Mutation {
     addBrand(
       brandname: String!
+      products: [ID]
+      imageUrl: String
       categories: [ID]
     ): Brand!
     updateBrand(
       _id: ID!
       brandname: String
       products: [ID]
+      imageUrl: String
       categories: [ID]
     ): Brand!
     deleteBrand(_id: ID!): Brand
