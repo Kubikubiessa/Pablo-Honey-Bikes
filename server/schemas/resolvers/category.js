@@ -37,7 +37,7 @@ const categoryResolvers = {
   Mutation: {
     addCategory: requireAuth(
       "add_category",
-      async (parent, { categoryname }, context, info) => {
+      async (parent, { categoryname, slug }, context, info) => {
         try {
           const userData = context.user;
 
@@ -48,6 +48,7 @@ const categoryResolvers = {
 
           const category = await Category.create({
             categoryname,
+            slug,
           });
           return category;
         } catch (error) {
@@ -58,7 +59,7 @@ const categoryResolvers = {
     ),
     updateCategory: requireAuth(
       "update_category",
-      async (parent, { _id, categoryname, products, brands }, context, info) => {
+      async (parent, { _id, categoryname, slug, products, brands }, context, info) => {
         try {
           const userData = context.user;
           const userRole = userData.role;
@@ -68,6 +69,7 @@ const categoryResolvers = {
 
           const updateFields = {
             categoryname,
+            slug,
             products,
             brands,
           };

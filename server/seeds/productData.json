@@ -1,18 +1,189 @@
 [
   {
-    "productname": "Skyline",
-    "description": "Product 1 description",
-    "price": 9.99
-    
-    
+    "productname": "Skyline 275",
+    "description": "Skyline 275 brings the perfect balance of strength and weight for cross-country riders.",
+    "price": 485,
+    "imageUrl": "/images/Nox_SKyline_275_part.png",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Depth",
+        "value": "25mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "420g",
+        "type": "text"
+      }
+    ]
   },
   {
-    "productname": "Teocalli",
-    "description": "Product 2 description",
-    "price": 19.99
-    
-    
+    "productname": "Skyline 29",
+    "description": "Skyline 29 offers a robust design ideal for aggressive cross-country riders.",
+    "price": 505,
+    "imageUrl": "/images/Nox_SKyline_275_part.png",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Depth",
+        "value": "25mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "430g",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "productname": "Teocalli 275",
+    "description": "Teocalli 275 is designed for trail riders seeking a light yet durable wheel.",
+    "price": 455,
+    "imageUrl": "/images/Nox_SKyline_275_part.png",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Depth",
+        "value": "28mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "410g",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "productname": "Teocalli 29",
+    "description": "Teocalli 29 is optimal for trail riders who demand strength and performance.",
+    "price": 475,
+    "imageUrl": "/images/teocalli29.jpg",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Depth",
+        "value": "28mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "425g",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "productname": "Farlow 275",
+    "description": "Farlow 275 suits aggressive trail and all-mountain riders with its wide and stiff rims.",
+    "price": 495,
+    "imageUrl": "/images/farlow275.jpg",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Width",
+        "value": "35mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "450g",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "productname": "Farlow 29",
+    "description": "Farlow 29 offers exceptional performance and durability for enduro riding.",
+    "price": 515,
+    "imageUrl": "/images/farlow29.jpg",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Width",
+        "value": "35mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "460g",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "productname": "Kitsuma 275",
+    "description": "Kitsuma 275 is built for the most demanding enduro races, offering superior strength.",
+    "price": 525,
+    "imageUrl": "/images/kitsuma275.jpg",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Width",
+        "value": "40mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "480g",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "productname": "Kitsuma 29",
+    "description": "Kitsuma 29 is the choice for riders who require a tough wheelset for harsh trails.",
+    "price": 545,
+    "imageUrl": "/images/kitsuma29.jpg",
+    "properties": [
+      {
+        "key": "Material",
+        "value": "Carbon Fiber",
+        "type": "text"
+      },
+      {
+        "key": "Rim Width",
+        "value": "40mm",
+        "type": "text"
+      },
+      {
+        "key": "Weight",
+        "value": "495g",
+        "type": "text"
+      }
+    ]
   }
 ]
+
 
   

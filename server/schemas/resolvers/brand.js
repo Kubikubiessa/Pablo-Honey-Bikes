@@ -36,7 +36,7 @@ const brandResolvers = {
     Mutation: {
         addBrand: requireAuth(
             "add_brand",
-            async (parent, { brandname, products, imageUrl, categories }, context, info) => {
+            async (parent, { brandname, slug, products, imageUrl, categories }, context, info) => {
                 try {
                     const userData = context.user;
                     const userRole = userData.role;
@@ -46,6 +46,7 @@ const brandResolvers = {
 
                     const brand = await Brand.create({
                         brandname,
+                        slug,
                         products,
                         imageUrl,
                         categories
@@ -59,7 +60,7 @@ const brandResolvers = {
         ),
         updateBrand: requireAuth(
             "update_brand",
-            async (parent, { _id, brandname, products, imageUrl, categories }, context, info) => {
+            async (parent, { _id, brandname, slug, products, imageUrl, categories }, context, info) => {
                 try {
                     const userData = context.user;
                     const userRole = userData.role;
@@ -69,6 +70,7 @@ const brandResolvers = {
 
                     const updateFields = {
                         brandname,
+                        slug,
                         products,
                         imageUrl,
                         categories

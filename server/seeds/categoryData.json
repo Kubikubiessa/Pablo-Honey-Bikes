@@ -2,16 +2,25 @@
     {
      
       "categoryname": "Mountain Bike Wheels",
+      "slug": "mtbwheels",
       "products": []
     },
     {
     
       "categoryname": "Gravel Bike Wheels",
+      "slug": "gravelwheels",
       "products": []
     },
     {
      
       "categoryname": "Road Bike Wheels",
+      "slug": "roadwheels",
+      "products": []
+    },
+    {
+  
+      "categoryname": "Rental Bikes",
+      "slug": "rentalbikes",
       "products": []
     }
   ]

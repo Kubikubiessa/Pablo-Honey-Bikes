@@ -1,13 +1,17 @@
 const db = require('../config/connection');
-const User  = require('../models/User');
-const Product  = require('../models/Product');
-const Category  = require('../models/Category');
-const Role  = require('../models/Role');
+// const { User, Product, Category, Role, Brand } = require('../models');
+const User = require('../models/User');
+const Product = require('../models/Product');
+const Category = require('../models/Category');
+const Role = require('../models/Role');
+const Brand = require('../models/Brand');
+
 
 const userData = require('./userData.json');
 const productData = require('./productData.json');
 const categoryData = require('./categoryData.json');
 const roleData = require('./roleData.json');
+const brandData = require('./brandData.json');
 
 db.once('open', async () => {
   try {
@@ -15,47 +19,34 @@ db.once('open', async () => {
     await Product.deleteMany({});
     await Category.deleteMany({});
     await Role.deleteMany({});
+    await Brand.deleteMany({});
 
     const categories = await Category.insertMany(categoryData);
-    console.log('Categories seeded!', categories);
+    console.log('Categories seeded!');
 
-    const productwithCategories = productData.map((product) => {
-      
-      return { ...product, category: categories[0] };
-    });
-    const products = await Product.insertMany(productwithCategories);
-    console.log('Products seeded!', products)
-    
-
-    // for (let i = 0; i < thoughtSeeds.length; i++) {
-    //   const { _id, thoughtAuthor } = await Thought.create(thoughtSeeds[i]);
-    //   const user = await User.findOneAndUpdate(
-    //     { username: thoughtAuthor },
-    //     {
-    //       $addToSet: {
-    //         thoughts: _id,
-    //       },
-    //     }
-    //   );
-    // }
-
-    // const roles = await Role.insertMany(roleData);
-    // console.log('Roles seeded!');
+    const brands = await Brand.insertMany(brandData);
+    console.log('Brands seeded!');
 
     const roles = await Role.insertMany(roleData);
     console.log('Roles seeded!');
-    const userswithRole = userData.map((user) => {
-      
-      return { ...user, role: roles[0] };
-    });
-    const users = await User.insertMany(userswithRole);
-    console.log('Users with roles seeded!', users)
-     
 
-   
+    const users = await User.insertMany(userData.map(user => {
+      return { ...user, role: roles[Math.floor(Math.random() * roles.length)]._id };
+    }));
+    console.log('Users with roles seeded!');
+
+    const products = await Product.insertMany(productData.map(product => {
+      return {
+        ...product,
+        category: categories[Math.floor(Math.random() * categories.length)]._id,
+        brand: brands[Math.floor(Math.random() * brands.length)]._id,
+      };
+    }));
+    console.log('Products seeded!');
+
     process.exit(0);
   } catch (error) {
-    throw error;
+    console.error('Failed to seed database:', error);
+    process.exit(1);
   }
 });
- 

@@ -6,6 +6,7 @@ const typeDefs = gql`
   type Rental {
     _id: ID!
     rentalname: String
+    slug: String
     price: Float!
     properties: [Property!]!
   }
@@ -23,12 +24,14 @@ const typeDefs = gql`
     type Mutation {
         addRental(
             rentalname: String!
+            slug: String
             price: Float!
             properties: [PropertyInput!]!
         ): Rental
         updateRental(
             _id: ID!
             rentalname: String!
+            slug: String
             price: Float!
             properties: [PropertyInput!]!
         ): Rental!

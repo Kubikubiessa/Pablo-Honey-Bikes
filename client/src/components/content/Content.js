@@ -1,29 +1,30 @@
 import React from "react";
 import "./Content.css";
 import { Link } from "react-router-dom";
+ 
 
 export default function Content() {
   return (
     <div className="home-categories">
       <p className="home-categories-title">EXPLORE OUR CUSTOM WHEEL OPTIONS:</p>
-
+      
       <div className="home-categories-windowWrap">
         <Link
-          to="/mtbwheels"
+          to="/brand-selection/mtbwheels"
           className="home-categories-window home-categories-window1"
         >
           <div className="home-categories-innerWindow"></div>
           <p className="home-categories-windowText">Mountain Bike Wheels</p>
         </Link>
         <Link
-          to="/roadwheels"
+          to="/brand-selection/roadwheels"
           className="home-categories-window home-categories-window2"
         >
           <div className="home-categories-innerWindow"></div>
           <p className="home-categories-windowText">Road Bike Wheels</p>
         </Link>
         <Link
-          to="/gravelwheels"
+          to="/brand-selection/gravelwheels"
           className="home-categories-window home-categories-window3"
         >
           <div className="home-categories-innerWindow"></div>

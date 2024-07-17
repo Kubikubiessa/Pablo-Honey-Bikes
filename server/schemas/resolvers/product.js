@@ -20,12 +20,21 @@ const productResolvers = {
         throw error;
       }
     },
-    products: async (parent, { category }, context, info) => {
+    products: async (parent, { category, brand }, context, info) => {
       try {
-        const query = category ? { category } : {};
+        const query = {};
+        if (category) query.category = category;
+        if (brand) query.brand = brand;
         const products = await Product.find(query)
           .populate("category")
           .populate("brand");
+        console.log("Received category ID:", category);
+        console.log("Mongo query object:", query);
+
+        // const query = category ? { category } : {};
+        // const products = await Product.find(query)
+        //   .populate("category")
+        //   .populate("brand");
         return products;
       } catch (error) {
         console.error("products:", error);
@@ -38,7 +47,15 @@ const productResolvers = {
       "add_product",
       async (
         parent,
-        { productname, description, price, properties, imageUrl, category, brand },
+        {
+          productname,
+          description,
+          price,
+          properties,
+          imageUrl,
+          category,
+          brand,
+        },
         context,
         info
       ) => {
@@ -82,7 +99,16 @@ const productResolvers = {
       "update_product",
       async (
         parent,
-        { _id, productname, description, price, properties, imageUrl, category, brand },
+        {
+          _id,
+          productname,
+          description,
+          price,
+          properties,
+          imageUrl,
+          category,
+          brand,
+        },
         context,
         info
       ) => {

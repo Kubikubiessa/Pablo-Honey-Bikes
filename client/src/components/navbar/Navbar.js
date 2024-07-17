@@ -23,12 +23,12 @@ const Navbar = () => {
   let toggleNav = closeNav ? "nav-menu active" : "nav-menu";
 
   const shopDropdownItems = [
-    { label: "Mountain Bike Wheels", path: "/mtbwheels" },
-    { label: "Road Bike Wheels", path: "/roadwheels" },
-    { label: "Gravel Bike Wheels", path: "/gravelwheels" },
+    { label: "Mountain Bike Wheels", path: "/brand-selection/mtbwheels" },
+    { label: "Road Bike Wheels", path: "/brand-selection/roadwheels" },
+    { label: "Gravel Bike Wheels", path: "/brand-selection/gravelwheels" },
     { label: "Rental Bikes", path: "/rentalbikes" }
   ];
-
+ 
   return (
     <nav className="navbar">
       <div className="navbar-brand">

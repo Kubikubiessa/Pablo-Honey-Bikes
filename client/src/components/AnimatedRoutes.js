@@ -13,9 +13,10 @@ import Checkout from "../pages/checkout/Checkout";
 import AdminDash from "../pages/admindash/AdminDash";
 import CustomerDash from "../pages/customerdash/CustomerDash";
 import ManageProducts from "../pages/admindash/ManageProducts";
+import BrandSelection from "../pages/brandselection/BrandSelection"; 
+import ProductListing from "../pages/productlisting/ProductListing";
+
 import { AnimatePresence } from "framer-motion";
- 
- 
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -29,6 +30,7 @@ const AnimatedRoutes = () => {
           <Route path="/customerlogin" element={<CustomerLogin />} />
           <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/brand-selection/:categorySlug" element={<BrandSelection />} />
           <Route path="/mtbwheels" element={<MtbWheels />} />
           <Route path="/roadwheels" element={<RoadWheels />} />
           <Route path="/gravelwheels" element={<GravelWheels />} />
@@ -37,10 +39,12 @@ const AnimatedRoutes = () => {
           <Route path="/admindash" element={<AdminDash />} />
           <Route path="/admindash/products" element={<ManageProducts />} />
           <Route path="/customerdash" element={<CustomerDash />} />
+          <Route path="/categories/:categoryId/products" element={<ProductListing />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </AnimatePresence>
     </>
   );
 };
+
 export default AnimatedRoutes;

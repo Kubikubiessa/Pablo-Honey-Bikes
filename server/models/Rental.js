@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const rentalSchema = new Schema({
   rentalname: {type: String},
+  slug: {type: String},
   properties: [
     {
       key: String,

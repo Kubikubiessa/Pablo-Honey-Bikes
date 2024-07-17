@@ -72,6 +72,7 @@ export const GET_CATEGORIES = gql`
     categories {
       _id
       categoryname
+      slug
       # Include other category fields if needed
     }
   }
@@ -92,6 +93,10 @@ export const GET_PRODUCT = gql`
         _id
         categoryname
       }
+      brand {
+        _id
+        brandname
+      }
       # Include other product fields if needed
     }
   }
@@ -111,6 +116,10 @@ export const GET_PRODUCTS = gql`
       category {
         _id
         categoryname
+      }
+      brand {
+        _id
+        brandname
       }
       # Include other product fields if needed
     }
@@ -239,6 +248,7 @@ export const GET_RENTALS = gql`
     rentals {
       _id
       rentalname
+      slug
       properties {
         key
         value
@@ -248,13 +258,13 @@ export const GET_RENTALS = gql`
     }
   }
 `;
- 
 
 export const GET_BRANDS = gql`
   query GetBrands {
     brands {
       _id
       brandname
+      slug
       imageUrl
       products {
         _id
@@ -285,6 +295,5 @@ export const GET_BRAND = gql`
     }
   }
 `;
-
 
 //old queries
